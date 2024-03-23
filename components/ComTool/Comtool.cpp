@@ -78,6 +78,8 @@ ComTool::ComTool(int device_num, int win_num, QSettings *cfg, ToNewWidget *paren
 	});
 
 	// 重新渲染高亮
+	ui_->refreshLog->hide();
+
 	disconnect(ui_->refreshLog, 0, 0, 0);
 	connect(ui_->refreshLog, &QPushButton::clicked, this, [&] {
 		QString textstr = ui_->txtMain->toPlainText();
@@ -244,6 +246,9 @@ ComTool::ComTool(int device_num, int win_num, QSettings *cfg, ToNewWidget *paren
 
 		}
 	});
+
+	//更新模式选择的UI
+	ChangeMode();
 }
 
 void ComTool::UIInit() {
@@ -251,6 +256,7 @@ void ComTool::UIInit() {
 	ui_->HEXEdit->hide();
 
 	//未实现功能
+	ui_->btnSave->hide();
 	ui_->btnLoadData->hide();
 
 	QStringList baud_list;
@@ -361,6 +367,7 @@ void ComTool::UIInit() {
 
 	//预设发送区和消息区的上下分割比例
 	// SizeSplitterWithFactor(ui_->SendSplitter,true,0.8,0.2);
+
 
 	//居中窗口
 	QuiHelper::SetFormInCenter(this);
@@ -770,20 +777,38 @@ void ComTool::ChangeMode() {
 	bool tmp;
 	if (ui_->COMButton->isChecked())
 	{
-		ui_->label_6->setVisible(false);
-		ui_->IPLine->setVisible(false);
+		// ui_->label_6->setVisible(false);
+		ui_->IPLine->setEnabled(false);
+		ui_->COMCombo->setEnabled(true);
+		ui_->BandCombo->setEnabled(true);
+		ui_->ParityBitCombo->setEnabled(true);
+		ui_->DataBitCombo->setEnabled(true);
+		ui_->StopBitCombo->setEnabled(true);
+
 		tmp = true;
 	} else if (ui_->TCPClientButton->isChecked())
 	{
-		ui_->label_6->setVisible(true);
-		ui_->IPLine->setVisible(true);
+		// ui_->label_6->setVisible(true);
+		ui_->IPLine->setEnabled(true);
 		ui_->label_6->setText("IP:Port");
+		ui_->COMCombo->setEnabled(false);
+		ui_->BandCombo->setEnabled(false);
+		ui_->ParityBitCombo->setEnabled(false);
+		ui_->DataBitCombo->setEnabled(false);
+		ui_->StopBitCombo->setEnabled(false);
+
 		tmp = false;
 	} else
 	{
-		ui_->label_6->setVisible(true);
-		ui_->IPLine->setVisible(true);
+		// ui_->label_6->setVisible(true);
+		ui_->IPLine->setEnabled(true);
 		ui_->label_6->setText("HearingIP");
+		ui_->COMCombo->setEnabled(false);
+		ui_->BandCombo->setEnabled(false);
+		ui_->ParityBitCombo->setEnabled(false);
+		ui_->DataBitCombo->setEnabled(false);
+		ui_->StopBitCombo->setEnabled(false);
+
 		tmp = false;
 	}
 
