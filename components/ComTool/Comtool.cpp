@@ -151,20 +151,20 @@ ComTool::ComTool(int device_num, int win_num, QSettings *cfg, ToNewWidget *paren
 	connect(ui_->ckHexSend, &QRadioButton::toggled, this, [&] {
 		if (ui_->ckHexSend->isChecked())
 		{
-			connect(ui_->HEXEdit, &QTextEditWithKey::released, this, [&] {
+			connect(ui_->HEXEdit, &QTextEditWithKey::textChanged, this, [&] {
 				HEXCollation();
 			});
 			HEXCollation();
 
-			connect(ui_->SendDataEdit, &QTextEditWithKey::released, this, [&] {
+			connect(ui_->SendDataEdit, &QTextEditWithKey::textChanged, this, [&] {
 				StringEditToHEX();
 			});
 			ui_->SendDataEdit->setPlaceholderText("String区");
 			ui_->HEXEdit->show();
 		} else
 		{
-			disconnect(ui_->SendDataEdit, &QTextEditWithKey::released, nullptr, nullptr);
-			disconnect(ui_->HEXEdit, &QTextEditWithKey::released, nullptr, nullptr);
+			disconnect(ui_->SendDataEdit, &QTextEditWithKey::textChanged, nullptr, nullptr);
+			disconnect(ui_->HEXEdit, &QTextEditWithKey::textChanged, nullptr, nullptr);
 			ui_->SendDataEdit->setPlainText(ui_->HEXEdit->toPlainText());
 			ui_->HEXEdit->hide();
 			ui_->HEXEdit->clear();
@@ -827,8 +827,20 @@ void ComTool::ChangeMode() {
 //通过HEX区的KeyReleased触发
 void ComTool::HEXCollation() {
 	// qDebug() << "Process";
+
+	ui_->HEXEdit->blockSignals(true);
+	ui_->SendDataEdit->blockSignals(true);
+
 	//转化为大写，并将内容复制到HEX区
 	QString trans_line = ui_->HEXEdit->toPlainText();
+	//排除没字符时的空逻辑
+	if(trans_line.isEmpty())
+	{
+		ui_->SendDataEdit->clear();
+		ui_->HEXEdit->blockSignals(false);
+		ui_->SendDataEdit->blockSignals(false);
+		return;
+	}
 	trans_line = trans_line.toUpper();
 	const QRegExp rule1("0X");
 	const QRegExp rule2(" ");
@@ -890,12 +902,15 @@ void ComTool::HEXCollation() {
 
 		ui_->SendDataEdit->setText(str_data);
 	}
+	ui_->HEXEdit->blockSignals(false);
+	ui_->SendDataEdit->blockSignals(false);
 }
 
 //通过发送框的KeyReleased触发
 void ComTool::StringEditToHEX() {
 	// qDebug() << "Process";
-
+	//阻止信号发出
+	ui_->HEXEdit->blockSignals(true);
 	QString str_data = ui_->SendDataEdit->toPlainText();
 	str_data = str_data.replace("\\n", "\n");
 	str_data = str_data.replace("\\a", "\a");
@@ -933,4 +948,5 @@ void ComTool::StringEditToHEX() {
 
 	ui_->HEXEdit->setPlainText(hex);
 	ui_->HEXEdit->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+	ui_->HEXEdit->blockSignals(false);
 }
