@@ -360,7 +360,7 @@ QPushButton:disabled, ToolButton:disabled {
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QtMaterialRadioButton" name="radioButton_2">
+                <widget class="QtMaterialRadioButton" name="ckStrSend">
                  <property name="text">
                   <string>Str</string>
                  </property>

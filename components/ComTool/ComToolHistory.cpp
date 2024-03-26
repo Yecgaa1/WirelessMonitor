@@ -14,11 +14,21 @@ void ComTool::ComToolHistoryTableInit() {
     }); //清空历史记录
 
     connect(ui_->historyTable, &QTableWidget::cellClicked, this, [&](int row, int col) {
-        ui_->SendDataEdit->setText(ui_->historyTable->item(row, 0)->text());
+        if (ui_->historyTable->item(row, 3)->text() == "hex") {
+            if (ui_->ckStrSend->isChecked()) {
+                ui_->ckHexSend->setChecked(true);
+            }
+            ui_->HEXEdit->setPlainText(ui_->historyTable->item(row, 0)->text());
+        } else {
+            if (ui_->ckHexSend->isChecked()) {
+                ui_->ckStrSend->setChecked(true);
+            }
+            ui_->SendDataEdit->setPlainText(ui_->historyTable->item(row, 0)->text());
+        }
     }); //单击
 
     connect(ui_->historyTable, &QTableWidget::cellDoubleClicked, this, [&](int row, int col) {
-        if (!ui_->ckHexSend->isChecked())
+        if (!ui_->historyTable->item(row, 0))
             ui_->SendDataEdit->setPlainText(ui_->historyTable->item(row, 0)->text());
         else
             ui_->HEXEdit->setPlainText(ui_->historyTable->item(row, 0)->text());

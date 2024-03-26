@@ -757,6 +757,8 @@ void ComTool::SendData() {
     }
 
     if (history_send_list_.contains(data)) {
+        //该逻辑是正确的，因为你大概不存在HEX和str同样内容却同时需要历史记录的情况存在
+        //判断字符类型是否相同
         if (ui_->ckHexSend->isChecked() !=
             history_send_list_[data].is_Hex) {
             history_send_list_[data].is_Hex = ui_->ckHexSend
@@ -918,7 +920,6 @@ void ComTool::ReadErrorNet() {
 
 ///模式改变所导致的视觉效果变化的更新
 void ComTool::ChangeMode() {
-    bool tmp;
     if (ui_->COMButton->isChecked()) {
         // ui_->label_6->setVisible(false);
         ui_->IPLine->setEnabled(false);
@@ -927,8 +928,6 @@ void ComTool::ChangeMode() {
         ui_->ParityBitCombo->setEnabled(true);
         ui_->DataBitCombo->setEnabled(true);
         ui_->StopBitCombo->setEnabled(true);
-
-        tmp = true;
     } else if (ui_->TCPClientButton->isChecked()) {
         // ui_->label_6->setVisible(true);
         ui_->IPLine->setEnabled(true);
@@ -938,8 +937,6 @@ void ComTool::ChangeMode() {
         ui_->ParityBitCombo->setEnabled(false);
         ui_->DataBitCombo->setEnabled(false);
         ui_->StopBitCombo->setEnabled(false);
-
-        tmp = false;
     } else {
         // ui_->label_6->setVisible(true);
         ui_->IPLine->setEnabled(true);
@@ -949,15 +946,7 @@ void ComTool::ChangeMode() {
         ui_->ParityBitCombo->setEnabled(false);
         ui_->DataBitCombo->setEnabled(false);
         ui_->StopBitCombo->setEnabled(false);
-
-        tmp = false;
     }
-
-    ui_->COMLayout->setEnabled(tmp);
-    ui_->BandLayout->setEnabled(tmp);
-    ui_->DataBitLayout->setEnabled(tmp);
-    ui_->ParityBitLayout->setEnabled(tmp);
-    ui_->StopBitLayout->setEnabled(tmp);
 }
 
 /// TODO: 1. 当错误输入的时候，下方出现提示框（超出F）
