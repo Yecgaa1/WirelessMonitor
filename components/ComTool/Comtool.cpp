@@ -80,9 +80,11 @@ ComTool::ComTool(int device_num,
                 QClipboard *clipboard =
                     QApplication::clipboard();
                 QString text = clipboard->text();
-                ui_->SendDataEdit->setPlainText(text);
+                if (!ui_->ckHexSend->isChecked())
+                    ui_->SendDataEdit->setPlainText(text);
+                else
+                    ui_->HEXEdit->setPlainText(text);
                 this->SendData();
-                ui_->SendDataEdit->setTextColor("black");
             });
 
     // 清空发送区
@@ -647,7 +649,6 @@ void ComTool::AppendToTxtMain(char ComID,
     //不同类型不同颜色显示，当前函数仅支持4串口，因为颜色数量不足
     if (type < 3) {
         str_type = "接收 <<";
-
     } else if (type > 2) {
         str_type = "发送 >>";
     }
@@ -709,7 +710,7 @@ void ComTool::ProcessData(QByteArray main_serial_recv_data) {
         this->AppendToTxtMain(0, 1, buffer); // 往接收窗口添加数据
 
         buffer = QString::fromUtf8(main_serial_recv_data);
-        this->AppendToTxtMain(0, 2, buffer,true); // 往接收窗口添加数据
+        this->AppendToTxtMain(0, 2, buffer, true); // 往接收窗口添加数据
     } else {
         buffer = QString::fromUtf8(main_serial_recv_data);
         this->AppendToTxtMain(0, 1, buffer); // 往接收窗口添加数据
