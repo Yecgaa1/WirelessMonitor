@@ -153,10 +153,10 @@ set_target_properties(
 #)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND cp -r ${Boost_LIBRARY_DIR_DEBUG}/../bin/{python311_d.dll,boost_python311-vc143-mt-gyd-x64-1_83.dll,zlibd1.dll} ${CMAKE_CURRENT_BINARY_DIR}/
+        COMMAND cp -r ${Boost_LIBRARY_DIR_DEBUG}/../bin/{python311_d.dll,boost_python311-vc143-mt-gyd-x64-1_85.dll,zlibd1.dll} ${CMAKE_CURRENT_BINARY_DIR}/
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/thirdPartyTool/cp
-
 )
+
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
         COMMAND cp -r -f ${PROJECT_SOURCE_DIR}/config ${CMAKE_CURRENT_BINARY_DIR}/
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/thirdPartyTool/cp
@@ -181,6 +181,7 @@ endif ()
 
 
 add_subdirectory(thirdTarget_ComTool)
+add_subdirectory(thirdTarget_I2CTool)
 
 configure_file(
         "${RepeaterWidgetPath}/VersionConfig.h.in"
