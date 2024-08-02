@@ -125,11 +125,13 @@ endif ()
 
 if (EXISTS "${Boost_LIBRARY_DIR_DEBUG}/python311.lib")
     message(STATUS "python311.lib exists, is OK!?")
+    message(STATUS ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib)
 
 else ()
     execute_process(COMMAND cp.exe -f ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib ${Boost_LIBRARY_DIR_DEBUG}/python311.lib
             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/thirdPartyTool/cp)
     message(STATUS "python311_d.lib copy OK")
+    message(STATUS ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib)
 endif ()
 
 target_link_libraries(
