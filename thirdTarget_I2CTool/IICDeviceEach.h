@@ -7,6 +7,8 @@
 
 #include "RepeaterWidget.h"
 #include "PythonWorkWithI2C.h"
+#include "atlmem.h"
+#include "ui_IICDeviceEach.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class IICDeviceEach; }
 QT_END_NAMESPACE
@@ -18,6 +20,7 @@ class IICDeviceEach : public RepeaterWidget {
     explicit IICDeviceEach(QWidget *parent = nullptr);
     ~IICDeviceEach() override;
     Ui::IICDeviceEach *ui_;
+    ULONG EnumDevice();
  private:
 
     PythonWork *python_work_;

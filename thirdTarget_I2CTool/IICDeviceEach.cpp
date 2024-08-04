@@ -26,8 +26,8 @@ IICDeviceEach::IICDeviceEach(QWidget *parent) :
       qDebug() << python_work_->ReciveDataFromI2C("3B", "FB92FFD01E3E");
       qDebug() << python_work_->ReciveDataFromI2C("43", "07DF0AC0F512");
     });
-    auto tmp=new CH339Control(this);
-    tmp->EnumDevice();
+
+    EnumDevice();
 }
 
 IICDeviceEach::~IICDeviceEach() {

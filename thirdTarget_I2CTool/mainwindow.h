@@ -2,7 +2,7 @@
 #define MAIN__MAINWINDOW_H_
 
 #include <QMainWindow>
-
+#include <Windows.h>
 #include "qtmaterialsnackbar.h"
 #include "qtmaterialtabs.h"
 

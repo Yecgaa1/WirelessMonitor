@@ -65,7 +65,7 @@
           </widget>
          </item>
          <item>
-          <widget class="FluComboBox" name="comboBox_2"/>
+          <widget class="FluComboBox" name="DeviceComboBox"/>
          </item>
          <item>
           <widget class="FluPushButton" name="ConnectCH">

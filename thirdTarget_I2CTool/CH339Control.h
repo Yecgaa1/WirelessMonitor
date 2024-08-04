@@ -5,10 +5,9 @@
 #ifndef CH339CONTROL_H
 #define CH339CONTROL_H
 
-#include "atlmem.h"
+
 #include "IICDeviceEach.h"
 #include "CH347DLL.H"
-
 
 typedef struct _USB_DEVICE_DESCRIPTOR {
     UCHAR bLength;
@@ -27,15 +26,5 @@ typedef struct _USB_DEVICE_DESCRIPTOR {
     UCHAR bNumConfigurations;
 } USB_DEVICE_DESCRIPTOR, *PUSB_DEVICE_DESCRIPTOR;
 #pragma pack()
-
-class CH339Control {
-    public:
-        explicit CH339Control(IICDeviceEach *ui) {
-            ui_=ui;
-        }
-        static ULONG EnumDevice();
-    private:
-        IICDeviceEach *ui_;
-};
 
 #endif //CH339CONTROL_H
