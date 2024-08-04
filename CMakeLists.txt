@@ -34,10 +34,10 @@ set(Boost_NO_WARN_NEW_VERSIONS 1)
 
 #include(C:/Users/xtx/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake)
 
-find_package(QT NAMES Qt6 REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent)
+find_package(QT NAMES Qt6 REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent Svg)
 find_package(Qt6 REQUIRED COMPONENTS Core5Compat)       # QT6
 find_package(Qt6 REQUIRED COMPONENTS Gui)               # QT6
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent Svg)
 
 
 find_package(Python
@@ -136,7 +136,7 @@ endif ()
 
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC ${Boost_LIBRARY_DIR_DEBUG}/python311.lib PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
-        Qt${QT_VERSION_MAJOR}::Core Qt6::PrintSupport Qt6::SerialPort
+        Qt${QT_VERSION_MAJOR}::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Svg
         Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent "${CMAKE_CURRENT_SOURCE_DIR}/api/OpenGL32.Lib" ${Boost_LIBRARIES})
 
 

@@ -45,7 +45,7 @@ endif ()
 #file(GLOB_RECURSE UI "../components/IICDeviceBasic/*.ui")
 #file(GLOB_RECURSE QRC "../components/IICDeviceBasic/*.qrc")
 target_sources(${PROJECT_NAME} PUBLIC ${HEADER} ${SOURCE} ${UI} ${QRC} )
-#target_include_directories(${PROJECT_NAME} PUBLIC ../components/IICDeviceBasic/)
+target_include_directories(${PROJECT_NAME} PUBLIC ../thirdLib/CppQtFluentUi888/FluControls/)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}/python3.11)
 
 add_subdirectory(../api/Highlighter Highlighter)
@@ -55,10 +55,11 @@ add_subdirectory(../api/ConfigClass ConfigClass)
 add_subdirectory(../api/QTextEditWithKey QTextEditWithKey)
 add_subdirectory(../api/PythonWork PythonWork)
 add_subdirectory(../api/USBHandle USBHandle)
+add_subdirectory(../api/CH339DLL CH339DLL)
 
 target_link_libraries(
         ${PROJECT_NAME} PRIVATE ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib
-        Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets
+        Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls
         Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/../api/USBHandle/ATL/lib/atls.lib ${Boost_LIBRARIES})
 
 #set_target_properties(
@@ -111,4 +112,16 @@ endif ()
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND cp -r ${Boost_LIBRARY_DIR_DEBUG}/../bin/{python311_d.dll,boost_python311-vc142-mt-gd-x64-1_85.dll,zlibd1.dll} ${CMAKE_CURRENT_BINARY_DIR}/
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
+)
+
+add_custom_target(resource_copy_I2C
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/res
+        ${PROJECT_BINARY_DIR}/res
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/StyleSheet
+        ${PROJECT_BINARY_DIR}/StyleSheet
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/code
+        ${PROJECT_BINARY_DIR}/code
 )

@@ -14,6 +14,9 @@
    <string>IICDeviceBasic</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -42,17 +45,30 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
-          <widget class="QLabel" name="label_5">
+          <widget class="FluLabel" name="label_5">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>幼圆</family>
+             <pointsize>13</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string>连接设备</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_2"/>
+          <widget class="FluComboBox" name="comboBox_2"/>
          </item>
          <item>
-          <widget class="QPushButton" name="ConnectCH">
+          <widget class="FluPushButton" name="ConnectCH">
            <property name="text">
             <string>连接设备</string>
            </property>
@@ -63,7 +79,20 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <widget class="QLabel" name="label_4">
+          <widget class="FluLabel" name="label_4">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>幼圆</family>
+             <pointsize>13</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string>设备配置文件夹</string>
            </property>
@@ -77,7 +106,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="ChooseConfigFilePath">
+          <widget class="FluPushButton" name="ChooseConfigFilePath">
            <property name="text">
             <string>选择文件夹</string>
            </property>
@@ -88,7 +117,20 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="FluLabel" name="label">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>幼圆</family>
+             <pointsize>13</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string>地址 0x</string>
            </property>
@@ -106,7 +148,20 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="FluLabel" name="label_2">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>幼圆</family>
+             <pointsize>13</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string>通信速率 kbit</string>
            </property>
@@ -124,14 +179,27 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="FluLabel" name="label_3">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>幼圆</family>
+             <pointsize>13</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string>数据长度</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox">
+          <widget class="FluComboBox" name="comboBox">
            <item>
             <property name="text">
              <string>7</string>
@@ -149,14 +217,27 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QLabel" name="state">
+          <widget class="FluLabel" name="state">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>幼圆</family>
+             <pointsize>13</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string>状态：已连接</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="apply">
+          <widget class="FluPushButton" name="apply">
            <property name="text">
             <string>应用</string>
            </property>
@@ -262,9 +343,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="ConfigAutoScan">
+          <widget class="FluPushButton" name="ConfigAutoScan">
            <property name="text">
-            <string>配置自动刷新</string>
+            <string>地址探针</string>
            </property>
           </widget>
          </item>
@@ -282,6 +363,21 @@
    <extends>QWidget</extends>
    <header>repeaterwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FluPushButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">FluPushButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FluLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">FluLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FluComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">FluComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

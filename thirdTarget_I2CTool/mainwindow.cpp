@@ -1,10 +1,13 @@
 #include "mainwindow.h"
 
+#include <FluLabel.h>
+
 #include "./ui_mainwindow.h"
 #include "ConfigClass.h"
 #include "IICDeviceEach.h"
 #include "VersionConfig.h"
-
+#include "FluPushButton.h"
+#include "ui_IICDeviceEach.h"
 
 int record_DeviceNum = 0, record_WinNum = 0;
 
@@ -24,7 +27,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui_(new Ui::MainW
     snackbar_->setTextColor(QColor(0,0,0));
     this->setWindowIcon(QIcon("./config/Icon.ico"));
     this->setWindowTitle("ComTool串口助手"+QString(V_BUILD_TIME)+"_"+QString(V_GIT_INFO));
-
+    // auto tmp=new FluDropDownButton();
+    // tmp_widget->ui_->label_5->setLabelStyle(FluLabelStyle::BodyStrongTextBlockStyle);
+    // auto repoLabel = new FluLabel(this);
+    // repoLabel->setLabelStyle(FluLabelStyle::BodyStrongTextBlockStyle);
+    // repoLabel->setText("To clone thepository");
 }
 
 MainWindow::~MainWindow() {
