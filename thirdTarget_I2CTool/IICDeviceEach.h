@@ -38,6 +38,8 @@ class IICDeviceEach : public RepeaterWidget {
 
         BOOL CH347WriteI2C(uint8_t Addr, uint8_t DataAddr, uint8_t *Data, uint8_t DataLen);
         BOOL CH347ReadI2C(uint8_t DeviceReadAddr, uint8_t DataAddr, uint8_t *Data, uint8_t DataLen,bool hasDataAddr=true);
+
+        void Loadxlsx();
     private:
         PythonWork *python_work_;
 };

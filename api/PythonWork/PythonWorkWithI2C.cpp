@@ -9,10 +9,10 @@ PythonWorkWithI2C::PythonWorkWithI2C() : PythonWork() {
 bool PythonWorkWithI2C::PythonLoadFileForI2C(const QString &file_path) {
     return PythonLoadFile(file_path, "I2CWork");
 }
-QString PythonWorkWithI2C::PythonRunUserDefForI2C(const QString &addr, const QString &val) {
+QString PythonWorkWithI2C::PythonRunUserDefeForI2CWithAddr(const QString &addr, const QString &val) {
     return PythonRunUserDef("fuction_" + addr, val);
 }
 QString PythonWorkWithI2C::ReciveDataFromI2C(const QString &addr, const QString &val) {
     PythonValueSave("data_" + addr, val);
-    return PythonRunUserDefForI2C(addr, val);
+    return PythonRunUserDefeForI2CWithAddr(addr, val);
 }
