@@ -68,7 +68,7 @@
           <widget class="FluComboBox" name="DeviceComboBox"/>
          </item>
          <item>
-          <widget class="FluPushButton" name="ConnectCH">
+          <widget class="FluToggleButton" name="ConnectCH">
            <property name="text">
             <string>连接设备</string>
            </property>
@@ -101,7 +101,7 @@
          <item>
           <widget class="QLabel" name="DeviceFile">
            <property name="text">
-            <string>C:/GitProject/QT/config/I2C/MPU6050.py</string>
+            <string>C:/GitProject/QT/config/I2C/MPU6050</string>
            </property>
           </widget>
          </item>
@@ -132,14 +132,56 @@
             </font>
            </property>
            <property name="text">
-            <string>地址 0x</string>
+            <string>写地址 0x</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit">
+          <widget class="FluLineEdit" name="ADDR_W">
            <property name="text">
             <string>D0</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="FluLabel" name="label_3">
+           <property name="font">
+            <font>
+             <family>幼圆</family>
+             <pointsize>13</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>读地址 0x</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="FluLineEdit" name="ADDR_R">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="FluCheckBox" name="isRW1">
+           <property name="font">
+            <font>
+             <family>幼圆</family>
+             <pointsize>13</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>末尾读写位</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -163,51 +205,33 @@
             </font>
            </property>
            <property name="text">
-            <string>通信速率 kbit</string>
+            <string>通信速率</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_2">
-           <property name="text">
-            <string>100</string>
+          <widget class="FluComboBox" name="SpeedChooseCombo">
+           <property name="currentIndex">
+            <number>1</number>
            </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="FluLabel" name="label_3">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>幼圆</family>
-             <pointsize>13</pointsize>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>数据长度</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="FluComboBox" name="comboBox">
            <item>
             <property name="text">
-             <string>7</string>
+             <string>20KHz</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>10</string>
+             <string>100KHz</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>400KHz</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>750KHz</string>
             </property>
            </item>
           </widget>
@@ -217,29 +241,9 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="FluLabel" name="state">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>幼圆</family>
-             <pointsize>13</pointsize>
-             <bold>true</bold>
-            </font>
-           </property>
+          <widget class="FluPushButton" name="applyI2C">
            <property name="text">
-            <string>状态：已连接</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="FluPushButton" name="apply">
-           <property name="text">
-            <string>应用</string>
+            <string>应用参数</string>
            </property>
           </widget>
          </item>
@@ -378,6 +382,21 @@
    <class>FluComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">FluComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FluToggleButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">FluToggleButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FluLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">FluLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FluCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">FluCheckBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
