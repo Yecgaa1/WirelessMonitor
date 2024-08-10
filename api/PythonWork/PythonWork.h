@@ -14,6 +14,7 @@
 
 #include <FluPushButton.h>
 #include <QApplication>
+#include <QHttpServer>
 using namespace boost::python;
 
 class PythonWork {
@@ -25,7 +26,7 @@ class PythonWork {
     bool PythonExec(const QString &val_name);
     object class_object_;
     object main_namespace_;
-
+    QHttpServer server;
     //以下函数为绑定使用
     virtual QString ReciveDataFromI2C(const QString &addr, const QString &val) { return {}; };//接收I2C数据
 

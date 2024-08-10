@@ -3,6 +3,49 @@
 //
 
 #include "CH339Control.h"
+#include <QHttpServerResponse>
+bool convertHexStringToUInt8Array(const QString &input, uint8_t *output, int maxLength, int &actualLength) {
+    actualLength = 0;
+    memset(output, 0, maxLength);
+    // 正则表达式匹配类似 "0x00 0x04" 的模式
+    QRegularExpression regex(R"(\b0x[0-9a-fA-F]{2}\b)");
+    QRegularExpressionMatchIterator matchIterator = regex.globalMatch(input);
+
+    while (matchIterator.hasNext()) {
+        QRegularExpressionMatch match = matchIterator.next();
+        if (match.hasMatch()) {
+            // 提取匹配到的字符串，并转换为uint8_t
+            bool ok;
+            uint8_t value = match.captured().toUInt(&ok, 16); // 将字符串转为16进制数
+            if (!ok || actualLength >= maxLength) {
+                return false;
+            }
+            output[actualLength++] = value;
+        } else {
+            return false; // 如果发现无法转换的字符串，直接返回false
+        }
+    }
+
+    return actualLength > 0; // 至少要有一个成功转换的字节
+}
+
+bool convertSingleHexStringToUInt8(const QString &input, uint8_t &output) {
+    // 正则表达式匹配类似 "0x00" 的模式
+    QRegularExpression regex(R"(\b0x[0-9a-fA-F]{2}\b)");
+    QRegularExpressionMatch match = regex.match(input);
+
+    // 如果正则表达式没有匹配到，或者匹配超过一个
+    if (!match.hasMatch() || input.count(regex) != 1) {
+        return false;
+    }
+
+    // 转换为uint8_t
+    bool ok;
+    output = match.captured().toUInt(&ok, 16);
+
+    // 检查转换是否成功
+    return ok;
+}
 
 //枚举设备
 ULONG IICDeviceEach::EnumDevice() {
@@ -53,8 +96,8 @@ BOOL IICDeviceEach::OpenDevice() {
         disconnect(ui_->ConnectCH, &QPushButton::clicked, this, &IICDeviceEach::OpenDevice);
         connect(ui_->ConnectCH, &QPushButton::clicked, this, &IICDeviceEach::CloseDevice);
 
-        bool DevIsOpened=CH347I2C_Set(SpiI2cGpioDevIndex, 0);
-        qDebug() <<DevIsOpened;
+        bool DevIsOpened = CH347I2C_Set(SpiI2cGpioDevIndex, 0);
+        qDebug() << DevIsOpened;
         return true;
     }
     return false;
@@ -114,52 +157,58 @@ BOOL IICDeviceEach::CH347InitI2C() {
     qDebug("CH347InitI2C %s", RetVal ? "succ" : "failure");
 
     uint8_t Data[2] = {0x08, 0x00};
-    uint8_t rec[6]={0};
-    CH347ReadI2C(0x71, 0x00, rec, 1, false);
+    uint8_t rec[6] = {0};
+    CH347ReadI2C(0x71, 0x00, rec, 1);
 
     CH347WriteI2C(0x70, 0xe1, Data, 2);
     QThread::msleep(500);
-    CH347ReadI2C(0x71, 0x00, rec, 1, false);
+    CH347ReadI2C(0x71, 0x00, rec, 1);
 
     uint8_t Data2[2] = {0x33, 0x00};
     CH347WriteI2C(0x70, 0xac, Data2, 2);
     QThread::msleep(500);
-    CH347ReadI2C(0x71, 0x00, rec, 5, false);
+    CH347ReadI2C(0x71, 0x00, rec, 5);
 
     uint8_t databuff[6];
-    databuff[0]=rec[1];
-    databuff[1]=rec[2];
-    databuff[2]=rec[3];
-    databuff[3]=rec[4];
-    databuff[4]=0x00;
-    uint32_t SRH=(databuff[0]<<12)+(databuff[1]<<4)+(databuff[2]>>4);
-    uint32_t ST=((databuff[2]&0X0f)<<16)+(databuff[3]<<8)+(databuff[4]);
-    float humidity=(int)(SRH*100.0/1024/1024+0.5);
-    float temperature=((int)(ST*2000.0/1024/1024+0.5))/10.0-50;
-    qDebug()<<humidity<<temperature;
+    databuff[0] = rec[1];
+    databuff[1] = rec[2];
+    databuff[2] = rec[3];
+    databuff[3] = rec[4];
+    databuff[4] = 0x00;
+    uint32_t SRH = (databuff[0] << 12) + (databuff[1] << 4) + (databuff[2] >> 4);
+    uint32_t ST = ((databuff[2] & 0X0f) << 16) + (databuff[3] << 8) + (databuff[4]);
+    float humidity = (int) (SRH * 100.0 / 1024 / 1024 + 0.5);
+    float temperature = ((int) (ST * 2000.0 / 1024 / 1024 + 0.5)) / 10.0 - 50;
+    qDebug() << humidity << temperature;
     return RetVal;
 }
 
 BOOL IICDeviceEach::CH347WriteI2C(uint8_t DeviceAddr, uint8_t DataAddr, uint8_t *Data, uint8_t DataLen) {
-    UCHAR InBuf[1]={0};
-    uint8_t OutBuf[512]={0};
+    if (ui_->DeviceComboBox->currentIndex() == -1) {
+        return false;
+    }
+    UCHAR InBuf[1] = {0};
+    uint8_t OutBuf[512] = {0};
     // 合并 DeviceAddr
     memcpy(&OutBuf, &DeviceAddr, 1);
     // 合并 DataAddr
     memcpy(&OutBuf[1], &DataAddr, 1);
     // 合并 Data
     memcpy(&OutBuf[2], Data, DataLen);
+    qDebug() << "CH347WriteI2C" << ui_->DeviceComboBox->currentIndex();
     CH347StreamI2C(ui_->DeviceComboBox->currentIndex(), DataLen, OutBuf, 0, InBuf);
 
     return true;
 }
 
-BOOL IICDeviceEach::CH347ReadI2C(uint8_t DeviceReadAddr, uint8_t DataAddr, uint8_t *ReadData, uint8_t ReadDataLen,
-                                 bool hasDataAddr) {
+BOOL IICDeviceEach::CH347ReadI2C(uint8_t DeviceReadAddr, uint8_t DataAddr, uint8_t *ReadData, uint8_t ReadDataLen) {
+    if (ui_->DeviceComboBox->currentIndex() == -1) {
+        return false;
+    }
     uint8_t OutBuf[256] = {0};
     // 合并 DeviceAddr
     memcpy(&OutBuf, &DeviceReadAddr, 1);
-    if (hasDataAddr) {
+    if (DataAddr != 0) {
         // 合并 DataAddr
         memcpy(&OutBuf + 1, &DataAddr, 1);
         CH347StreamI2C(ui_->DeviceComboBox->currentIndex(), 2, OutBuf, ReadDataLen, ReadData);
@@ -168,4 +217,51 @@ BOOL IICDeviceEach::CH347ReadI2C(uint8_t DeviceReadAddr, uint8_t DataAddr, uint8
     }
 
     return true;
+}
+void IICDeviceEach::AddRoute() {
+    python_work_->server.route("/WriteI2C/<arg>/<arg>/<arg>/<arg>",
+                               [&](const QString &DeviceReadAddrT, const QString &DataAddrT, const QString &DataT,
+                                   const qint32 DataLenT) {
+                                   uint8_t DeviceReadAddr = 0;
+                                   uint8_t DataAddr = 0;
+                                   uint8_t Data[512] = {0};
+                                   int DataLen = 0;
+                                   if (!convertSingleHexStringToUInt8(DeviceReadAddrT, DeviceReadAddr)) {
+                                       return "Invalid DeviceReadAddr";
+                                   }
+                                   if (!convertSingleHexStringToUInt8(DataAddrT, DataAddr)) {
+                                       return "Invalid DataAddr";
+                                   }
+                                   if (!convertHexStringToUInt8Array(DataT, Data, 512, DataLen)) {
+                                       return "Invalid Data";
+                                   }
+                                   if (DataLen != DataLenT) {
+                                       return "Invalid DataLen";
+                                   }
+                                   if (!this->CH347WriteI2C(DeviceReadAddr, DataAddr, Data, DataLen)) {
+                                       return "ReadI2C failed";
+                                   }
+                                   return "WriteI2C success";
+                               });
+    python_work_->server.route("/ReadI2C/<arg>/<arg>/<arg>",
+                               [&](const QString &DeviceReadAddrT, const QString &DataAddrT,
+                                   const qint32 DataLen) {
+                                   uint8_t DeviceReadAddr = 0;
+                                   uint8_t DataAddr = 0;
+                                   uint8_t Data[512] = {0};
+                                   QString ret;
+                                   if (!convertSingleHexStringToUInt8(DeviceReadAddrT, DeviceReadAddr)) {
+                                       ret = "Invalid DeviceReadAddr";
+                                   } else if (!convertSingleHexStringToUInt8(DataAddrT, DataAddr)) {
+                                       ret = "Invalid DataAddr";
+                                   } else if (!this->CH347ReadI2C(DeviceReadAddr, DataAddr, Data, DataLen)) {
+                                       ret = "ReadI2C failed";
+                                   } else {
+                                       for (int i = 0; i < DataLen; i++) {
+                                           ret += QString("0x%1-").arg(Data[i], 2, 16, QChar('0'));
+                                       }
+                                       ret.chop(1);
+                                   }
+                                   return ret;
+                               });
 }

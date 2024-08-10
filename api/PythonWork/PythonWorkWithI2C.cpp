@@ -20,3 +20,5 @@ QString PythonWorkWithI2C::ReciveDataFromI2C(const QString &addr, const QString 
 
 
 
+
+

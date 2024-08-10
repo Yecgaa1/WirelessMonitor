@@ -13,6 +13,7 @@
 #include "CH339Control.h"
 #include "ui_IICDeviceEach.h"
 
+
 IICDeviceEach::IICDeviceEach(QWidget *parent) : RepeaterWidget(parent), ui_(new Ui::IICDeviceEach) {
     ui_->setupUi(this);
 
@@ -57,6 +58,11 @@ IICDeviceEach::IICDeviceEach(QWidget *parent) : RepeaterWidget(parent), ui_(new 
     ui_->tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded); //水平滚动条
     ui_->tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded); //垂直滚动条
     Loadxlsx();
+    AddRoute();
+    uint8_t tmp[100];
+    int t;
+    convertHexStringToUInt8Array("0xaB 0xfF 0x10",tmp,100,t);
+    qDebug()<<t;
 }
 
 IICDeviceEach::~IICDeviceEach() {
@@ -64,10 +70,13 @@ IICDeviceEach::~IICDeviceEach() {
 }
 
 void IICDeviceEach::onReadButtonClicked(int row, int col) {
+
 }
 void IICDeviceEach::onWriteButtonClicked(int row, int col) {
+
 }
 void IICDeviceEach::onActionButtonClicked(int row, int col) {
+
 
 }
 void IICDeviceEach::Loadxlsx() {

@@ -16,13 +16,15 @@ QT_BEGIN_NAMESPACE
 namespace Ui {
 class IICDeviceEach;
 }
-
+bool convertHexStringToUInt8Array(const QString &input, uint8_t* output, int maxLength, int &actualLength);
+bool convertSingleHexStringToUInt8(const QString &input, uint8_t &output);
 QT_END_NAMESPACE
 class PythonWork;
 class IICDeviceEach : public RepeaterWidget {
         Q_OBJECT
 
     public:
+        void AddRoute();
         explicit IICDeviceEach(QWidget *parent = nullptr);
         ~IICDeviceEach() override;
         void onReadButtonClicked(int row, int col);
@@ -40,7 +42,7 @@ class IICDeviceEach : public RepeaterWidget {
         BOOL CH347InitI2C();
 
         BOOL CH347WriteI2C(uint8_t Addr, uint8_t DataAddr, uint8_t *Data, uint8_t DataLen);
-        BOOL CH347ReadI2C(uint8_t DeviceReadAddr, uint8_t DataAddr, uint8_t *Data, uint8_t DataLen,bool hasDataAddr=true);
+        BOOL CH347ReadI2C(uint8_t DeviceReadAddr, uint8_t DataAddr, uint8_t *Data, uint8_t DataLen);
 
         void Loadxlsx();
     private:

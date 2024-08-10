@@ -27,7 +27,7 @@ file(GLOB RC "*.rc")
 find_package(QT NAMES Qt6 REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent)
 find_package(Qt6 REQUIRED COMPONENTS Core5Compat)       # QT6
 find_package(Qt6 REQUIRED COMPONENTS Gui)               # QT6
-find_package(Qt6 REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent)
+find_package(Qt6 REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent HttpServer)
 
 find_package(Python
         REQUIRED COMPONENTS Development)
@@ -59,7 +59,7 @@ add_subdirectory(../api/CH339DLL CH339DLL)
 add_subdirectory(../thirdLib/QXlsx/QXlsx QXlsx)
 target_link_libraries(
         ${PROJECT_NAME} PRIVATE ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib
-        Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls QXlsx::QXlsx
+        Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls QXlsx::QXlsx Qt6::HttpServer
         Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/../api/USBHandle/ATL/lib/atls.lib ${Boost_LIBRARIES})
 
 #set_target_properties(

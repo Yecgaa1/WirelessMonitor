@@ -23,7 +23,9 @@ PythonWork::PythonWork() {
     setenv("PYTHONHOME", R"(C:\Users\xtx\.vcpkg-clion\vcpkg\packages\python3_x64-windows\tools\python3)", 1);
     try {
         Py_Initialize();
-        ADDR_W=0x38;
+        server.listen(QHostAddress::Any, 19230);
+        qInfo() << "Python Initialize success";
+        qDebug()<< "Server 127.0.0.1 listening on port 19230";
 
 //        object my_python_class_module = import("MPU6050");
 //
