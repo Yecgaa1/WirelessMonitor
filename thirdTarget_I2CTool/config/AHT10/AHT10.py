@@ -1,3 +1,4 @@
+import I2CBase
 class I2CWork():
     def __init__(self):
         print("ATH10 init")

@@ -87,10 +87,10 @@ BOOL IICDeviceEach::OpenDevice() {
         qDebug() << ("打开设备失败,请先选择设备");
         return false;
     }
-    bool DevIsOpened = (CH347OpenDevice(SpiI2cGpioDevIndex) != INVALID_HANDLE_VALUE);
+    isOpened = (CH347OpenDevice(SpiI2cGpioDevIndex) != INVALID_HANDLE_VALUE);
     CH347SetTimeout(SpiI2cGpioDevIndex, 500, 500);
-    qDebug() << (">>Open the device...%s", DevIsOpened ? "Success" : "Failed");
-    if (DevIsOpened) {
+    qDebug() << (">>Open the device...%s", isOpened ? "Success" : "Failed");
+    if (isOpened) {
         ui_->DeviceComboBox->setEnabled(false);
         ui_->ConnectCH->setText("断开连接");
         disconnect(ui_->ConnectCH, &QPushButton::clicked, this, &IICDeviceEach::OpenDevice);
@@ -184,7 +184,7 @@ BOOL IICDeviceEach::CH347InitI2C() {
 }
 
 BOOL IICDeviceEach::CH347WriteI2C(uint8_t DeviceAddr, uint8_t DataAddr, uint8_t *Data, uint8_t DataLen) {
-    if (ui_->DeviceComboBox->currentIndex() == -1) {
+    if (!isOpened) {
         return false;
     }
     UCHAR InBuf[1] = {0};
@@ -202,7 +202,7 @@ BOOL IICDeviceEach::CH347WriteI2C(uint8_t DeviceAddr, uint8_t DataAddr, uint8_t 
 }
 
 BOOL IICDeviceEach::CH347ReadI2C(uint8_t DeviceReadAddr, uint8_t DataAddr, uint8_t *ReadData, uint8_t ReadDataLen) {
-    if (ui_->DeviceComboBox->currentIndex() == -1) {
+    if (!isOpened) {
         return false;
     }
     uint8_t OutBuf[256] = {0};
@@ -227,7 +227,7 @@ void IICDeviceEach::AddRoute() {
                                    uint8_t Data[512] = {0};
                                    int DataLen = 0;
                                    if (!convertSingleHexStringToUInt8(DeviceReadAddrT, DeviceReadAddr)) {
-                                       return "Invalid DeviceReadAddr";
+                                       return "Invalid DeviceWriteAddr";
                                    }
                                    if (!convertSingleHexStringToUInt8(DataAddrT, DataAddr)) {
                                        return "Invalid DataAddr";
@@ -239,7 +239,7 @@ void IICDeviceEach::AddRoute() {
                                        return "Invalid DataLen";
                                    }
                                    if (!this->CH347WriteI2C(DeviceReadAddr, DataAddr, Data, DataLen)) {
-                                       return "ReadI2C failed";
+                                       return "WriteI2C failed";
                                    }
                                    return "WriteI2C success";
                                });

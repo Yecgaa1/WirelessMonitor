@@ -20,9 +20,12 @@ int setenv(const char *name, const char *value, int overwrite) {
 
 PythonWork::PythonWork() {
     setenv("PYTHONPATH", R"(C:\GitProject\QT\thirdTarget_I2CTool\config\AHT10)", 1);
-    setenv("PYTHONHOME", R"(C:\Users\xtx\.vcpkg-clion\vcpkg\packages\python3_x64-windows\tools\python3)", 1);
+    // setenv("PYTHONPATH", R"(C:/Path/miniconda3/DLLs)", 0);
+    setenv("PYTHONHOME", "C:/Path/miniconda3", 1);
+
     try {
         Py_Initialize();
+
         server.listen(QHostAddress::Any, 19230);
         qInfo() << "Python Initialize success";
         qDebug()<< "Server 127.0.0.1 listening on port 19230";
@@ -72,6 +75,9 @@ bool PythonWork::PythonLoadFile(const QString &file_path, const QString &class_n
     QFileInfo file_info = QFileInfo(file_path);
     setenv("PYTHONPATH", file_info.absolutePath().toStdString().c_str(), 1);//对中文支持存疑
     try {
+        // Py_SetPath(L"C:\\Path\\miniconda3;C:/GitProject/QT/thirdTarget_I2CTool/config/AHT10/lib");
+        // object socket_module = import("_socket");
+        // PyRun_SimpleString("import sys; sys.path.append('C:/Path/miniconda3/DLLs')");
         object my_python_class_module = import(file_info.baseName().toStdString().c_str());//需要不包含.py的文件名
         class_object_ = my_python_class_module.attr(class_name.toStdString().c_str())();
         main_namespace_ = class_object_.attr("__dict__");//声明命名空间,存储变量实例

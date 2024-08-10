@@ -36,7 +36,7 @@ class IICDeviceEach : public RepeaterWidget {
         BOOL CloseDevice();
         uint8_t ADDR_W;
         uint8_t ADDR_R;
-
+        bool isOpened=false;
         FluShortInfoBar *sInfoBar;
 
         BOOL CH347InitI2C();
