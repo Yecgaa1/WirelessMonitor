@@ -4,7 +4,8 @@
 
 #include "PythonWorkWithI2C.h"
 PythonWorkWithI2C::PythonWorkWithI2C() : PythonWork() {
-    PythonLoadFileForI2C(R"(C:\GitProject\QT\config\I2C\MPU6050.py)");//测试用
+    PythonLoadFileForI2C(R"(C:\GitProject\QT\thirdTarget_I2CTool\config\AHT10\AHT10.py)");//测试用
+    ADDR_W=0x38;
 }
 bool PythonWorkWithI2C::PythonLoadFileForI2C(const QString &file_path) {
     return PythonLoadFile(file_path, "I2CWork");
@@ -16,3 +17,6 @@ QString PythonWorkWithI2C::ReciveDataFromI2C(const QString &addr, const QString 
     PythonValueSave("data_" + addr, val);
     return PythonRunUserDefeForI2CWithAddr(addr, val);
 }
+
+
+

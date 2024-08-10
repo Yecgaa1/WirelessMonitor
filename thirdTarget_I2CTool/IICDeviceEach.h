@@ -25,6 +25,9 @@ class IICDeviceEach : public RepeaterWidget {
     public:
         explicit IICDeviceEach(QWidget *parent = nullptr);
         ~IICDeviceEach() override;
+        void onReadButtonClicked(int row, int col);
+        void onWriteButtonClicked(int row, int col);
+        void onActionButtonClicked(int row, int col);
         Ui::IICDeviceEach *ui_;
         ULONG EnumDevice();
         BOOL OpenDevice();

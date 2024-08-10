@@ -19,7 +19,6 @@ IICDeviceEach::IICDeviceEach(QWidget *parent) : RepeaterWidget(parent), ui_(new 
     ui_->LRSplitter->setStretchFactor(0, 1);
     ui_->LRSplitter->setStretchFactor(1, 3);
 
-
     //新建消息提示栏
     // sInfoBar = new FluShortInfoBar(FluShortInfoBarType::Info, window());
     // sInfoBar->setFixedWidth(270);
@@ -63,6 +62,14 @@ IICDeviceEach::IICDeviceEach(QWidget *parent) : RepeaterWidget(parent), ui_(new 
 IICDeviceEach::~IICDeviceEach() {
     delete ui_;
 }
+
+void IICDeviceEach::onReadButtonClicked(int row, int col) {
+}
+void IICDeviceEach::onWriteButtonClicked(int row, int col) {
+}
+void IICDeviceEach::onActionButtonClicked(int row, int col) {
+
+}
 void IICDeviceEach::Loadxlsx() {
     QXlsx::Document xlsx("C:/GitProject/QT/thirdTarget_I2CTool/config/AHT10/AHT10.xlsx");
     if (!xlsx.load()) {
@@ -80,17 +87,59 @@ void IICDeviceEach::Loadxlsx() {
         for (int col = 1; col <= colCount; ++col) {
             QXlsx::Cell *cell = xlsx.cellAt(row, col);
             if (cell) {
-                auto *item = new QTableWidgetItem(cell->value().toString());
-                ui_->tableWidget->setItem(row - 1, col - 1, item);
+                QString tmp = cell->value().toString();
+                if (tmp == "读写") {
+                    QWidget *cellWidget = new QWidget();
+                    QVBoxLayout *layout = new QVBoxLayout(cellWidget);
+                    layout->setContentsMargins(0, 0, 0, 0);
+
+                    FluPushButton *readButton = new FluPushButton("读", cellWidget);
+                    FluPushButton *writeButton = new FluPushButton("写", cellWidget);
+                    layout->addWidget(readButton);
+                    layout->addWidget(writeButton);
+                    cellWidget->setLayout(layout);
+
+                    // 绑定信号
+                    connect(readButton, &QPushButton::clicked, this, [this, row, col]() {
+                        onReadButtonClicked(row - 1, col - 1);
+                    });
+                    connect(writeButton, &QPushButton::clicked, this, [this, row, col]() {
+                        onWriteButtonClicked(row - 1, col - 1);
+                    });
+
+                    ui_->tableWidget->setCellWidget(row - 1, col - 1, cellWidget);
+                } else if (tmp == "读" || tmp == "执行") {
+                    FluPushButton *readButton = new FluPushButton(tmp, ui_->tableWidget);
+
+                    if (tmp == "读") {
+                        // 绑定信号，将行列信息通过 lambda 传递给槽函数
+                        connect(readButton, &QPushButton::clicked,
+                                [this, row, col]() { onReadButtonClicked(row - 1, col - 1); });
+                    } else {
+                        connect(readButton, &QPushButton::clicked,
+                                [this, row, col]() { onActionButtonClicked(row - 1, col - 1); });
+                    }
+
+                    ui_->tableWidget->setCellWidget(row - 1, col - 1, readButton);
+                } else {
+                    auto *item = new QTableWidgetItem(tmp);
+                    item->setTextAlignment(Qt::AlignCenter);
+                    if (cell->format().fontBold()) {
+                        QFont font = item->font();
+                        font.setBold(true);
+                        item->setFont(font);
+                    }
+                    ui_->tableWidget->setItem(row - 1, col - 1, item);
+                }
             }
         }
     }
 
     // 处理合并单元格
     QList<QXlsx::CellRange> merges = xlsx.currentWorksheet()->mergedCells();
-    foreach (QXlsx::CellRange range, merges) {
+    foreach(QXlsx::CellRange range, merges) {
         ui_->tableWidget->setSpan(range.firstRow() - 1, range.firstColumn() - 1,
-                             range.rowCount(), range.columnCount());
+                                  range.rowCount(), range.columnCount());
     }
 
     ui_->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -103,5 +152,4 @@ void IICDeviceEach::Loadxlsx() {
     QScrollBar *a = ui_->tableWidget->verticalScrollBar(); //获取到tablewidget的滚动条
     a->setSingleStep(5); //设置单步，值越小，下滑越慢
     ui_->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    
 }
