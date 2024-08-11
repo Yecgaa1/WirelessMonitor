@@ -94,7 +94,6 @@ PythonWork::~PythonWork() {
     Py_Finalize();
 }
 
-
 bool PythonWork::PythonExec(const QString &val_name) {
     try {
         exec(val_name.toStdString().c_str(), main_namespace_);

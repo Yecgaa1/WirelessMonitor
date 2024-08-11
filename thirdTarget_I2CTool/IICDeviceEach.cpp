@@ -18,7 +18,7 @@ IICDeviceEach::IICDeviceEach(QWidget *parent) : RepeaterWidget(parent), ui_(new 
     ui_->setupUi(this);
 
     ui_->LRSplitter->setStretchFactor(0, 1);
-    ui_->LRSplitter->setStretchFactor(1, 3);
+    ui_->LRSplitter->setStretchFactor(1, 2);
 
     //新建消息提示栏
     // sInfoBar = new FluShortInfoBar(FluShortInfoBarType::Info, window());
