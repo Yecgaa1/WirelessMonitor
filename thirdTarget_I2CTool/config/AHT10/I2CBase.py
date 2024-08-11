@@ -1,14 +1,14 @@
 import sys, os
 
 sys.path.clear()
-sys.path.append('C:/GitProject/QT/thirdTarget_I2CTool/config/AHT10/lib')
+sys.path.append('C:/GitProject/WirelessMonitor/thirdTarget_I2CTool/config/AHT10/lib')
 sys.path.append('C:/Path/miniconda3/')
 sys.path.append('C:/Path/miniconda3/Lib')
 sys.path.append('C:/Path/miniconda3/Lib/site-packages')
 sys.path.append('C:/Path/miniconda3/Scripts')
 sys.path.append('C:/Path/miniconda3/DLLs')
 sys.path.append('C:/Path/miniconda3/Library/bin')
-sys.path.append('C:/GitProject/QT/thirdTarget_I2CTool/config/AHT10/lib')
+sys.path.append('C:/GitProject/WirelessMonitor/thirdTarget_I2CTool/config/AHT10/lib')
 # os.chdir("C:/Path/miniconda3/Lib/site-packages")
 
 import requests

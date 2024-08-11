@@ -19,7 +19,7 @@ int setenv(const char *name, const char *value, int overwrite) {
 
 
 PythonWork::PythonWork() {
-    setenv("PYTHONPATH", R"(C:\GitProject\QT\thirdTarget_I2CTool\config\AHT10)", 1);
+    setenv("PYTHONPATH", R"(C:\GitProject\WirelessMonitor\thirdTarget_I2CTool\config\AHT10)", 1);
     // setenv("PYTHONPATH", R"(C:/Path/miniconda3/DLLs)", 0);
     setenv("PYTHONHOME", "C:/Path/miniconda3", 1);
 

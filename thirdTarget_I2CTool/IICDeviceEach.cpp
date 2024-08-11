@@ -80,7 +80,7 @@ void IICDeviceEach::onActionButtonClicked(int row, int col) {
 
 }
 void IICDeviceEach::Loadxlsx() {
-    QXlsx::Document xlsx("C:/GitProject/QT/thirdTarget_I2CTool/config/AHT10/AHT10.xlsx");
+    QXlsx::Document xlsx("C:/GitProject/WirelessMonitor/thirdTarget_I2CTool/config/AHT10/AHT10.xlsx");
     if (!xlsx.load()) {
         return;
     }
