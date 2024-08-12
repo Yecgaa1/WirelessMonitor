@@ -58,16 +58,23 @@ jobs:
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
 
-      - uses: shaowenchen/debugger-action@v1
+      - uses: shaowenchen/debugger-action@v2
         name: debugger
         if: always()
         timeout-minutes: 30
         continue-on-error: true
         with:
-          frp_server_addr: ${{ secrets.FRP_SERVER_ADDR }}
-          frp_server_port: ${{ secrets.FRP_SERVER_PORT }}
-          frp_token: ${{ secrets.FRP_TOKEN }}
-          ssh_port: 7597
+#          frp_server_addr: ${{ secrets.FRP_SERVER_ADDR }}
+#          frp_server_port: ${{ secrets.FRP_SERVER_PORT }}
+#          frp_token: ${{ secrets.FRP_TOKEN }}
+#          ssh_port: 7597
+          ngrok_token: ${{ secrets.NGROK_TOKEN }}
+          ngrok_addr_1: 30000
+          ngrok_proto_1: tcp
+          ngrok_addr_2: 30001
+          ngrok_proto_2: tcp
+          ngrok_addr_3: 30002
+          ngrok_proto_3: tcp
 
       - name: New Release
         if: startsWith(github.event.ref, 'refs/tags/')
