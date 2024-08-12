@@ -24,8 +24,6 @@ jobs:
       targetName: ComTool.exe
       fileName: ComTool
     steps:
-
-
       - name: Check out repository
         uses: actions/checkout@v3
         with:
@@ -42,7 +40,7 @@ jobs:
           version: ${{ matrix.qt_ver }}
           arch: ${{ matrix.qt_arch }}
           cache: ${{steps.cache-qt.outputs.cache-hit}}
-          modules: 'qt5compat qtmultimedia qtshadertools qtimageformats qtspeech qt3d qtscxml SerialPort PrintSupport'
+          modules: 'qt5compat qtmultimedia qtshadertools qtimageformats qtspeech qt3d qtscxml'
 
       - name: Msvc build & Package
         id: build
