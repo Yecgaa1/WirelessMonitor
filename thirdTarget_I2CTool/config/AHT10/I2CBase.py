@@ -12,7 +12,7 @@ sys.path.append('C:/GitProject/WirelessMonitor/thirdTarget_I2CTool/config/AHT10/
 # os.chdir("C:/Path/miniconda3/Lib/site-packages")
 
 import requests
-
+import time
 
 def WriteI2C(DevicWriteAddrT: str, DataAddrT: str, DataT: str, DataLenT: int):
     # 将参数转换为字符串

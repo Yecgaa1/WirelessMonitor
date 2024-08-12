@@ -57,6 +57,34 @@ bool PythonWork::PythonValueSave(const QString &val_name, const QString &val) {
         return false;
     }
 }
+QString PythonWork::PythonRunUserDef(const QString &def_name) {
+    try {
+        // object ret = class_object_.attr(def_name.toStdString().c_str());
+        // // std::string tmp = extract<std::string>(ret);//意外报错，但是不影响编译与功能运行
+        // QString tmp=QString::fromStdString(boost::python::extract<std::string>(boost::python::str(ret())));
+        // // return QString::fromStdString(tmp);
+        // return tmp;
+
+        // 获取方法对象
+        boost::python::object method = class_object_.attr(def_name.toStdString().c_str());
+
+        // 调用方法并获取返回值
+        boost::python::object ret = method();  // 这里调用方法并获取返回值
+
+        // 将返回值转换为字符串
+        std::string tmp = boost::python::extract<std::string>(boost::python::str(ret));
+
+        // 返回 QString 类型的字符串
+        return QString::fromStdString(tmp);
+
+    }
+    catch (const error_already_set &) {
+        PyErr_Print();
+        qInfo()
+            << "PythonRunUserDef not worked";
+        return {};
+    }
+}
 QString PythonWork::PythonRunUserDef(const QString &def_name, const QString &val) {
     try {
         object ret = class_object_.attr(def_name.toStdString().c_str())(val.toStdString().c_str());
