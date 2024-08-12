@@ -58,7 +58,7 @@ jobs:
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
 
-      - uses: shaowenchen/debugger-action@v2
+      - uses: shaowenchen/debugger-action@v1
         name: debugger
         if: always()
         timeout-minutes: 30
