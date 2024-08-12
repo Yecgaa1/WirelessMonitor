@@ -40,7 +40,7 @@ jobs:
           version: ${{ matrix.qt_ver }}
           arch: ${{ matrix.qt_arch }}
           cache: ${{steps.cache-qt.outputs.cache-hit}}
-          modules: 'qt5compat qtmultimedia qtshadertools qtimageformats qtspeech qt3d qtscxml'
+          modules: 'qt5compat qtmultimedia qtshadertools qtimageformats qtspeech qt3d qtscxml qtserialport'
 
       - name: Msvc build & Package
         id: build
@@ -58,7 +58,7 @@ jobs:
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
 
-      - name: Setup tmate session
+      - name: Setup tmate session if failed
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
         with:
