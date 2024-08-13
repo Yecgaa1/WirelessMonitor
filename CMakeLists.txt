@@ -119,19 +119,21 @@ target_include_directories(${PROJECT_NAME} PUBLIC ./config)
 MESSAGE(STATUS ${Boost_LIBRARY_DIR_DEBUG})
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}/python3.11)
 
-if (NOT DEFINED Boost_LIBRARY_DIR_DEBUG)
-    message(FATAL_ERROR "Boost_LIBRARY_DIR_DEBUG 未定义，请强制手动定义")
-endif ()
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    if (NOT DEFINED Boost_LIBRARY_DIR_DEBUG)
+        message(FATAL_ERROR "Boost_LIBRARY_DIR_DEBUG 未定义，请强制手动定义")
+    endif ()
 
-if (EXISTS "${Boost_LIBRARY_DIR_DEBUG}/python311.lib")
-    message(STATUS "python311.lib exists, is OK!?")
-    message(STATUS ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib)
+    if (EXISTS "${Boost_LIBRARY_DIR_DEBUG}/python311.lib")
+        message(STATUS "python311.lib exists, is OK!?")
+        message(STATUS ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib)
 
-else ()
-    execute_process(COMMAND cp.exe -f ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib ${Boost_LIBRARY_DIR_DEBUG}/python311.lib
-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/thirdPartyTool/cp)
-    message(STATUS "python311_d.lib copy OK")
-    message(STATUS ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib)
+    else ()
+        execute_process(COMMAND cp.exe -f ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib ${Boost_LIBRARY_DIR_DEBUG}/python311.lib
+                WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/thirdPartyTool/cp)
+        message(STATUS "python311_d.lib copy OK")
+        message(STATUS ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib)
+    endif ()
 endif ()
 
 target_link_libraries(
