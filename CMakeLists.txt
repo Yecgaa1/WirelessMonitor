@@ -44,7 +44,7 @@ find_package(Python
         REQUIRED COMPONENTS Development)
 #find_package(Boost
 #        REQUIRED COMPONENTS python311)
-find_package(Boost)
+#find_package(Boost)
 
 # get git hash
 macro(get_git_hash _git_hash)

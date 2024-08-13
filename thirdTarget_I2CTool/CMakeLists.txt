@@ -33,7 +33,7 @@ find_package(Python
         REQUIRED COMPONENTS Development)
 #find_package(Boost
 #        REQUIRED COMPONENTS python311)
-find_package(Boost)
+#find_package(Boost)
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_executable(${PROJECT_NAME} WIN32 ${HEADER} ${SOURCE} ${UI} ${QRC} ${RC})
