@@ -59,7 +59,7 @@ jobs:
           ninja --version
           mkdir build
           cd build
-          cmake -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_PREFIX_PATH=D:\a\WirelessMonitor\Qt\${{ matrix.qt_ver }}\msvc2019_64 -DCMAKE_TOOLCHAIN_FILE=D:\a/WirelessMonitor/WirelessMonitor/vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release -GNinja ..
+          cmake -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_PREFIX_PATH=D:\a\WirelessMonitor\Qt\${{ matrix.qt_ver }}\msvc2019_64\lib\cmake\ -DCMAKE_TOOLCHAIN_FILE=D:\a/WirelessMonitor/WirelessMonitor/vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release -GNinja ..
           cmake --build . --target all --config Release --parallel
           cmake --build . --target package
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
