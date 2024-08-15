@@ -40,7 +40,7 @@ jobs:
           version: ${{ matrix.qt_ver }}
           arch: ${{ matrix.qt_arch }}
           cache: ${{steps.cache-qt.outputs.cache-hit}}
-          modules: 'qt5compat qtmultimedia qtshadertools qtimageformats qtspeech qt3d qtscxml qtserialport qthttpserver'
+          modules: 'qt5compat qtmultimedia qtshadertools qtimageformats qtspeech qt3d qtscxml qtserialport qthttpserver qtwebsockets'
 
       - name: vcpkg build
         uses: johnwason/vcpkg-action@v6
