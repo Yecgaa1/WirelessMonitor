@@ -45,7 +45,7 @@ endif ()
 #file(GLOB_RECURSE SOURCE "../components/IICDeviceBasic/*.cpp")
 #file(GLOB_RECURSE UI "../components/IICDeviceBasic/*.ui")
 #file(GLOB_RECURSE QRC "../components/IICDeviceBasic/*.qrc")
-target_sources(${PROJECT_NAME} PUBLIC ${HEADER} ${SOURCE} ${UI} ${QRC} )
+target_sources(${PROJECT_NAME} PUBLIC ${HEADER} ${SOURCE} ${UI} ${QRC})
 target_include_directories(${PROJECT_NAME} PUBLIC ../thirdLib/CppQtFluentUi888/FluControls/)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}/python3.11)
 
@@ -58,11 +58,17 @@ add_subdirectory(../api/PythonWork PythonWork)
 add_subdirectory(../api/USBHandle USBHandle)
 add_subdirectory(../api/CH339DLL CH339DLL)
 add_subdirectory(../thirdLib/QXlsx/QXlsx QXlsx)
-target_link_libraries(
-        ${PROJECT_NAME} PRIVATE ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib
-        Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls QXlsx::QXlsx Qt6::HttpServer
-        Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/../api/USBHandle/ATL/lib/atls.lib ${Boost_LIBRARIES})
-
+if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    target_link_libraries(
+            ${PROJECT_NAME} PRIVATE ${Boost_LIBRARY_DIR_RELEASE}/python311.lib
+            Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls QXlsx::QXlsx Qt6::HttpServer
+            Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/../api/USBHandle/ATL/lib/atls.lib ${Boost_LIBRARIES})
+else ()
+    target_link_libraries(
+            ${PROJECT_NAME} PRIVATE ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib
+            Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls QXlsx::QXlsx Qt6::HttpServer
+            Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/../api/USBHandle/ATL/lib/atls.lib ${Boost_LIBRARIES})
+endif ()
 #set_target_properties(
 #        ${PROJECT_NAME}
 #        PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -82,10 +88,10 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND  ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
+            COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
     )
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND  ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
     )
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

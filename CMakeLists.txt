@@ -1,3 +1,12 @@
+#你的CMake构建选项应该如下样式
+#-G Ninja
+#-DBoost_NO_SYSTEM_PATHS=ON
+#-DBoost_INCLUDE_DIRS="C:/Users/xtx/.vcpkg-clion/vcpkg/installed/x64-windows/include/"
+#-DBOOST_LIBRARY_DIRS="C:/Users/xtx/.vcpkg-clion/vcpkg/installed/x64-windows/lib"
+#-DBoost_LIBRARY_DIR_DEBUG="C:/Users/xtx/.vcpkg-clion/vcpkg/installed/x64-windows/debug/lib"
+#-DBoost_LIBRARY_DIR_RELEASE="C:/Users/xtx/.vcpkg-clion/vcpkg/installed/x64-windows-release/lib"
+#-DCMAKE_PREFIX_PATH="C:\Qt\6.5.3\msvc2019_64\lib\cmake\"  -DCMAKE_TOOLCHAIN_FILE="C:/Users/xtx/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake"
+#由于未能解决findboost问题，暂时如此设置
 cmake_minimum_required(VERSION 3.24)
 #project(Qt)
 
@@ -135,14 +144,19 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         message(STATUS ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib)
     endif ()
 endif ()
-
+if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
 target_link_libraries(
-        ${PROJECT_NAME} PUBLIC ${Boost_LIBRARY_DIR_DEBUG}/python311.lib PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+        ${PROJECT_NAME} PUBLIC ${Boost_LIBRARY_DIR_RELEASE}/python311.lib PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
         Qt${QT_VERSION_MAJOR}::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Svg
         Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent "${CMAKE_CURRENT_SOURCE_DIR}/api/OpenGL32.Lib" ${Boost_LIBRARIES})
+else ()
+    target_link_libraries(
+            ${PROJECT_NAME} PUBLIC ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+            Qt${QT_VERSION_MAJOR}::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Svg
+            Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent "${CMAKE_CURRENT_SOURCE_DIR}/api/OpenGL32.Lib" ${Boost_LIBRARIES})
+endif ()
 
-
-set_target_properties(
+    set_target_properties(
         ${PROJECT_NAME}
         PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
         MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
