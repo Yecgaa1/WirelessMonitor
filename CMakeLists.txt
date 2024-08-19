@@ -51,12 +51,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED PrintSupport COMPONENTS Network Seri
 
 find_package(Python
         REQUIRED COMPONENTS Development)
-
-
-if(POLICY CMP0167)
-    cmake_policy(SET CMP0167 NEW)
-endif()
-
 find_package(Boost
         REQUIRED COMPONENTS python311)
 #find_package(Boost)
