@@ -51,8 +51,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED PrintSupport COMPONENTS Network Seri
 
 find_package(Python
         REQUIRED COMPONENTS Development)
-#find_package(Boost
-#        REQUIRED COMPONENTS python311)
+find_package(Boost
+        REQUIRED COMPONENTS python311)
 #find_package(Boost)
 
 # get git hash
