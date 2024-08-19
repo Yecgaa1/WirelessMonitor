@@ -58,6 +58,10 @@ add_subdirectory(../api/PythonWork PythonWork)
 add_subdirectory(../api/USBHandle USBHandle)
 add_subdirectory(../api/CH339DLL CH339DLL)
 add_subdirectory(../thirdLib/QXlsx/QXlsx QXlsx)
+
+message(STATUS "Boost_LIBRARY_DIR_RELEASE is ${Boost_LIBRARY_DIR_RELEASE}")
+message(STATUS "Boost_LIBRARIES is ${Boost_LIBRARIES}")
+
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
     target_link_libraries(
             ${PROJECT_NAME} PRIVATE ${Boost_LIBRARY_DIR_RELEASE}/python311.lib
