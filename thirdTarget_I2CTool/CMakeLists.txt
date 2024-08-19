@@ -64,12 +64,12 @@ message(STATUS "Boost_LIBRARIES is ${Boost_LIBRARIES}")
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
     target_link_libraries(
-            ${PROJECT_NAME} PRIVATE ${Boost_LIBRARY_DIR_RELEASE}/python311.lib
+            ${PROJECT_NAME} PRIVATE
             Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls QXlsx::QXlsx Qt6::HttpServer
             Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/../api/USBHandle/ATL/lib/atls.lib ${Boost_LIBRARIES})
 else ()
     target_link_libraries(
-            ${PROJECT_NAME} PRIVATE ${Boost_LIBRARY_DIR_DEBUG}/python311_d.lib
+            ${PROJECT_NAME} PRIVATE
             Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls QXlsx::QXlsx Qt6::HttpServer
             Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/../api/USBHandle/ATL/lib/atls.lib ${Boost_LIBRARIES})
 endif ()
