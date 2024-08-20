@@ -28,6 +28,7 @@ find_package(QT NAMES Qt6 REQUIRED PrintSupport COMPONENTS Network SerialPort Wi
 find_package(Qt6 REQUIRED COMPONENTS Core5Compat)       # QT6
 find_package(Qt6 REQUIRED COMPONENTS Gui)               # QT6
 find_package(Qt6 REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent HttpServer)
+qt_standard_project_setup()
 
 find_package(Python
         REQUIRED COMPONENTS Development)
@@ -63,16 +64,29 @@ message(STATUS "Boost_LIBRARY_DIR_RELEASE is ${Boost_LIBRARY_DIR_RELEASE}")
 message(STATUS "Boost_LIBRARIES is ${Boost_LIBRARIES}")
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    get_target_property(Boost_DLL_LOCATION ${Boost_LIBRARIES} IMPORTED_LOCATION_RELEASE)
     target_link_libraries(
             ${PROJECT_NAME} PRIVATE
             Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls QXlsx::QXlsx Qt6::HttpServer
             Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/../api/USBHandle/ATL/lib/atls.lib ${Boost_LIBRARIES})
+    install(FILES ${Boost_LIBRARY_DIR_RELEASE}/../bin/zlib1.dll
+            DESTINATION ${CMAKE_INSTALL_BINDIR}
+            COMPONENT I2CTool
+    )
+
 else ()
+    get_target_property(Boost_DLL_LOCATION ${Boost_LIBRARIES} IMPORTED_LOCATION_DEBUG)
     target_link_libraries(
             ${PROJECT_NAME} PRIVATE
             Qt6::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Widgets FluControls QXlsx::QXlsx Qt6::HttpServer
             Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/../api/USBHandle/ATL/lib/atls.lib ${Boost_LIBRARIES})
+    install(FILES ${Boost_LIBRARY_DIR_DEBUG}/../bin/zlibd1.dll
+            DESTINATION ${CMAKE_INSTALL_BINDIR}
+            COMPONENT I2CTool
+    )
+
 endif ()
+
 #set_target_properties(
 #        ${PROJECT_NAME}
 #        PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -85,33 +99,8 @@ endif ()
 #        COMMAND cp.exe -r -f ${PROJECT_SOURCE_DIR}/config ${CMAKE_CURRENT_BINARY_DIR}
 #        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
 #)
-add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-        COMMAND cp.exe -r -f ${PROJECT_SOURCE_DIR}/config ${CMAKE_CURRENT_BINARY_DIR}
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
-)#不是说不能用-E，但是不能覆写确实不好用
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
-    )
-
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND cp.exe -r -f ${CMAKE_CURRENT_BINARY_DIR}/{${PROJECT_NAME}.exe,config/,resource/} ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
-
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND windeployqt.exe ${CMAKE_CURRENT_BINARY_DIR}/ComTool/${PROJECT_NAME}.exe
-            WORKING_DIRECTORY ${QT6_INSTALL_PREFIX}/bin
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_CURRENT_BINARY_DIR}/ComTool/${PROJECT_NAME}.exe ${CMAKE_CURRENT_BINARY_DIR}/ComTool/ComTool.exe
-    )
-endif ()
-
+#复制资源与配置文件
 if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/resource")
     message(STATUS "resource exists")
 
@@ -125,14 +114,110 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
 )
 
-add_custom_target(resource_copy_I2C
-        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/res
-        ${PROJECT_BINARY_DIR}/res
-        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/StyleSheet
-        ${PROJECT_BINARY_DIR}/StyleSheet
-        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/code
-        ${PROJECT_BINARY_DIR}/code
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+        COMMAND cp.exe -r -f ${PROJECT_SOURCE_DIR}/config ${CMAKE_CURRENT_BINARY_DIR}
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
+)#不是说不能用-E，但是不能覆写确实不好用
+
+
+install(TARGETS ${PROJECT_NAME}
+        BUNDLE DESTINATION .
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT I2CTool
 )
+
+install(FILES ${Boost_DLL_LOCATION} ${Python_RUNTIME_LIBRARY_DEBUG}
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT I2CTool
+)
+
+
+#set(deploy_tool_options_arg --no-compiler-runtime)
+qt_generate_deploy_app_script(
+        TARGET ${PROJECT_NAME}
+        OUTPUT_SCRIPT deploy_script
+        NO_UNSUPPORTED_PLATFORM_ERROR
+        #        DEPLOY_TOOL_OPTIONS ${deploy_tool_options_arg}
+)
+install(SCRIPT ${deploy_script} COMPONENT I2CTool)
+
+
+#if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
+#    )
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
+#    )
+#
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND cp.exe -r -f ${CMAKE_CURRENT_BINARY_DIR}/{${PROJECT_NAME}.exe,config/,resource/} ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
+#            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
+#
+#    )
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND windeployqt.exe ${CMAKE_CURRENT_BINARY_DIR}/ComTool/${PROJECT_NAME}.exe
+#            WORKING_DIRECTORY ${QT6_INSTALL_PREFIX}/bin
+#    )
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_CURRENT_BINARY_DIR}/ComTool/${PROJECT_NAME}.exe ${CMAKE_CURRENT_BINARY_DIR}/ComTool/ComTool.exe
+#    )
+#endif ()
+
+
+include(GNUInstallDirs)
+set(CPACK_PACKAGE_FILE_NAME "I2CTool")
+set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_GENERATOR "ZIP")
+# 设置支持 COMPONENT
+set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
+set(CPACK_RPM_COMPONENT_INSTALL ON)
+# Settings used when building NSIS installers
+set(CPACK_NSIS_MENU_LINKS
+        "ftp://ftpserver" "Test Ftp Link"
+        "ftps://ftpsserver" "Test Ftps Link"
+        "https://cmake.org" "CMake Web Site"
+        "https://github.com/" "Test Https Link"
+        "mailto:kitware@kitware.com" "Test MailTo Link"
+        "news://newsserver" "Test News Link"
+)
+
+# Suggested default root for end users of the installer:
+set(CPACK_NSIS_INSTALL_ROOT "C:/Program Files/CMake Tests Install Root")
+
+set(CPACK_COMPONENT_ALL I2CTool)
+set(CPACK_COMPONENTS_ALL I2CTool)
+set(CPACK_ARCHIVE_COMPONENT_INSTALL 1)
+include(CPack)
+
+
+
+
+
+
+add_custom_target(install_I2CTool
+        COMMAND ${CMAKE_COMMAND} --install . --component I2CTool
+)
+add_custom_target(package_I2CTool
+        COMMAND ${CMAKE_CPACK_COMMAND} -c I2CTool
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Packaging I2CTool"
+)
+
+
+
+#
+#add_custom_target(resource_copy_I2C
+#        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/res
+#        ${PROJECT_BINARY_DIR}/res
+#        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/StyleSheet
+#        ${PROJECT_BINARY_DIR}/StyleSheet
+#        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/code
+#        ${PROJECT_BINARY_DIR}/code
+#)

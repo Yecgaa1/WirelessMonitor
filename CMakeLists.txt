@@ -46,8 +46,8 @@ set(Boost_NO_WARN_NEW_VERSIONS 1)
 find_package(QT NAMES Qt6 REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent Svg)
 find_package(Qt6 REQUIRED COMPONENTS Core5Compat)       # QT6
 find_package(Qt6 REQUIRED COMPONENTS Gui)               # QT6
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent Svg)
-
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED PrintSupport COMPONENTS Network SerialPort Widgets OpenGL Concurrent Svg HttpServer)
+qt_standard_project_setup()
 
 find_package(Python
         REQUIRED COMPONENTS Development)
@@ -126,6 +126,7 @@ add_subdirectory(thirdLib)
 target_include_directories(${PROJECT_NAME} PUBLIC ./components)
 target_include_directories(${PROJECT_NAME} PUBLIC ./config)
 MESSAGE(STATUS ${Boost_LIBRARY_DIR_DEBUG})
+target_include_directories(${PROJECT_NAME} PUBLIC ../thirdLib/CppQtFluentUi888/FluControls/)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}/python3.11)
 
 #if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
@@ -146,18 +147,18 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS} ${Boost_
 #endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-target_link_libraries(
-        ${PROJECT_NAME}  PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
-        Qt${QT_VERSION_MAJOR}::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Svg
-        Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent "${CMAKE_CURRENT_SOURCE_DIR}/api/OpenGL32.Lib" ${Boost_LIBRARIES})
+    target_link_libraries(
+            ${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+            Qt${QT_VERSION_MAJOR}::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Svg Qt6::HttpServer
+            Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/api/USBHandle/ATL/lib/atls.lib "${CMAKE_CURRENT_SOURCE_DIR}/api/OpenGL32.Lib" ${Boost_LIBRARIES})
 else ()
     target_link_libraries(
             ${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
-            Qt${QT_VERSION_MAJOR}::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Svg
-            Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent "${CMAKE_CURRENT_SOURCE_DIR}/api/OpenGL32.Lib" ${Boost_LIBRARIES})
+            Qt${QT_VERSION_MAJOR}::Core Qt6::PrintSupport Qt6::SerialPort Qt6::Svg Qt6::HttpServer
+            Qt6::Network qmetarialComponents Qt6::Core5Compat Qt6::Gui Qt6::OpenGL Qt6::Concurrent ${CMAKE_CURRENT_SOURCE_DIR}/api/USBHandle/ATL/lib/atls.lib "${CMAKE_CURRENT_SOURCE_DIR}/api/OpenGL32.Lib" ${Boost_LIBRARIES})
 endif ()
 
-    set_target_properties(
+set_target_properties(
         ${PROJECT_NAME}
         PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
         MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
@@ -169,10 +170,10 @@ endif ()
 #        COMMAND ${CMAKE_COMMAND} -E copy ${Boost_LIBRARY_DIR_DEBUG}/../bin/python311_d.dll ${CMAKE_CURRENT_BINARY_DIR}/
 #)
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND cp -r ${Boost_LIBRARY_DIR_DEBUG}/../bin/{python311_d.dll,boost_python311-vc143-mt-gyd-x64-1_85.dll,zlibd1.dll} ${CMAKE_CURRENT_BINARY_DIR}/
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/thirdPartyTool/cp
-)
+#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#        COMMAND cp -r ${Boost_LIBRARY_DIR_DEBUG}/../bin/{python311_d.dll,boost_python311-vc143-mt-gyd-x64-1_85.dll,zlibd1.dll} ${CMAKE_CURRENT_BINARY_DIR}/
+#        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/thirdPartyTool/cp
+#)
 
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
         COMMAND cp -r -f ${PROJECT_SOURCE_DIR}/config ${CMAKE_CURRENT_BINARY_DIR}/
