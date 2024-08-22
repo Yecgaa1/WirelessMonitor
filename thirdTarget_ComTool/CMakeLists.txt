@@ -72,27 +72,60 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
 )#不是说不能用-E，但是不能覆写确实不好用
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND  ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND  ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
-    )
+#if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND  ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
+#    )
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND  ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
+#    )
+#
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND cp.exe -r -f ${CMAKE_CURRENT_BINARY_DIR}/{${PROJECT_NAME}.exe,config/,resource/} ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
+#            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
+#
+#    )
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND windeployqt.exe ${CMAKE_CURRENT_BINARY_DIR}/ComTool/${PROJECT_NAME}.exe
+#            WORKING_DIRECTORY ${QT6_INSTALL_PREFIX}/bin
+#    )
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#            COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_CURRENT_BINARY_DIR}/ComTool/${PROJECT_NAME}.exe ${CMAKE_CURRENT_BINARY_DIR}/ComTool/ComTool.exe
+#    )
+#endif ()
 
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND cp.exe -r -f ${CMAKE_CURRENT_BINARY_DIR}/{${PROJECT_NAME}.exe,config/,resource/} ${CMAKE_CURRENT_BINARY_DIR}/ComTool/
-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
 
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND windeployqt.exe ${CMAKE_CURRENT_BINARY_DIR}/ComTool/${PROJECT_NAME}.exe
-            WORKING_DIRECTORY ${QT6_INSTALL_PREFIX}/bin
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_CURRENT_BINARY_DIR}/ComTool/${PROJECT_NAME}.exe ${CMAKE_CURRENT_BINARY_DIR}/ComTool/ComTool.exe
-    )
-endif ()
+install(TARGETS ${PROJECT_NAME}
+        BUNDLE DESTINATION .
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT ComTool
+)
+
+install(FILES ${Boost_DLL_LOCATION} ${Python_RUNTIME_LIBRARY_DEBUG}
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT ComTool
+)
+
+
+#set(deploy_tool_options_arg --no-compiler-runtime)
+qt_generate_deploy_app_script(
+        TARGET ${PROJECT_NAME}
+        OUTPUT_SCRIPT deploy_script
+        NO_UNSUPPORTED_PLATFORM_ERROR
+        #        DEPLOY_TOOL_OPTIONS ${deploy_tool_options_arg}
+)
+install(SCRIPT ${deploy_script} COMPONENT ComTool)
+
+add_custom_target(install_ComTool
+        COMMAND ${CMAKE_COMMAND} --install . --component ComTool
+)
+add_custom_target(package_ComTool
+        COMMAND ${CMAKE_CPACK_COMMAND}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Packaging ComTool"
+)
+
 
 if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/resource")
     message(STATUS "resource exists")
