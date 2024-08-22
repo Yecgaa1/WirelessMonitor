@@ -209,7 +209,7 @@ configure_file(
 include(GNUInstallDirs)
 #set(CPACK_PACKAGE_FILE_NAME "I2CTool")
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
-
+set(CPACK_PACKAGE_FILE_NAME "xtxTools-${build_time}-${GIT_BRANCH}-${GIT_HASH}")
 include(InstallRequiredSystemLibraries)
 set(CPACK_GENERATOR "ZIP")
 # 设置支持 COMPONENT
@@ -231,3 +231,9 @@ set(CPACK_NSIS_INSTALL_ROOT "C:/Program Files/CMake Tests Install Root")
 set(CPACK_COMPONENTS_ALL I2CTool ComTool)
 set(CPACK_ARCHIVE_COMPONENT_INSTALL 1)
 include(CPack)
+
+add_custom_target(packageCPack
+        COMMAND ${CMAKE_CPACK_COMMAND}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Packaging ComTool"
+)

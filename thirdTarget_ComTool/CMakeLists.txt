@@ -120,11 +120,7 @@ install(SCRIPT ${deploy_script} COMPONENT ComTool)
 add_custom_target(install_ComTool
         COMMAND ${CMAKE_COMMAND} --install . --component ComTool
 )
-add_custom_target(package_ComTool
-        COMMAND ${CMAKE_CPACK_COMMAND}
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        COMMENT "Packaging ComTool"
-)
+
 
 
 if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/resource")
