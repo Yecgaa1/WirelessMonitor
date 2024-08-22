@@ -85,6 +85,11 @@ else ()
             COMPONENT I2CTool
     )
 
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND cp -r ${Boost_LIBRARY_DIR_DEBUG}/../bin/{python311_d.dll,boost_python311-vc142-mt-gd-x64-1_85.dll,zlibd1.dll} ${CMAKE_CURRENT_BINARY_DIR}/
+            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
+    )
+
 endif ()
 
 #set_target_properties(
@@ -109,10 +114,7 @@ else ()
     file(COPY ../thirdLib/qmetarial/icons DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/resource FOLLOW_SYMLINK_CHAIN)
 endif ()
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND cp -r ${Boost_LIBRARY_DIR_DEBUG}/../bin/{python311_d.dll,boost_python311-vc142-mt-gd-x64-1_85.dll,zlibd1.dll} ${CMAKE_CURRENT_BINARY_DIR}/
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../thirdPartyTool/cp
-)
+
 
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
         COMMAND cp.exe -r -f ${PROJECT_SOURCE_DIR}/config ${CMAKE_CURRENT_BINARY_DIR}
