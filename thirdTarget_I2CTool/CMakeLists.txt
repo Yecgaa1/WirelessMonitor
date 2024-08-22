@@ -188,7 +188,6 @@ set(CPACK_NSIS_MENU_LINKS
 # Suggested default root for end users of the installer:
 set(CPACK_NSIS_INSTALL_ROOT "C:/Program Files/CMake Tests Install Root")
 
-set(CPACK_COMPONENT_ALL I2CTool)
 set(CPACK_COMPONENTS_ALL I2CTool)
 set(CPACK_ARCHIVE_COMPONENT_INSTALL 1)
 include(CPack)
