@@ -35,6 +35,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_PROJECT_VERSION 1.1)
 
 set(Boost_NO_WARN_NEW_VERSIONS 1)
+
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    if (NOT DEFINED Boost_LIBRARY_DIR_DEBUG)
+        message(FATAL_ERROR "Boost_LIBRARY_DIR_DEBUG 未定义，请强制手动定义")
+    endif ()
+else ()
+    if (NOT DEFINED Boost_LIBRARY_DIR_RELEASE)
+        message(FATAL_ERROR "Boost_LIBRARY_DIR_RELEASE 未定义，请强制手动定义")
+    endif ()
+endif ()
+
 #set(CMAKE_PREFIX_PATH "C:/Qt/6.2.4/msvc2019_64/")
 
 #set(Python_ROOT_DIR C:/Users/xtx/.vcpkg-clion/vcpkg/installed/x64-windows/include/python3.11)
