@@ -1,5 +1,6 @@
 name: Windows-Qt6.5.1-Build-Release
 on:
+  workflow_dispatch:
 #  push:
 #    paths:
 #      - 'thirdTarget_I2CTool/**'
@@ -8,7 +9,7 @@ on:
 #    paths:
 #      - 'thirdTarget_I2CTool/**'
 #      - '.github/workflows/Windows-Qt6.5.1.yml'
-    workflow_dispatch
+
 jobs:
   build:
     name: Build
