@@ -67,16 +67,6 @@ jobs:
         with:
           limit-access-to-actor: false
           timeout-minutes: 300
-      #发布Release
-      - name: New Release
-        if: startsWith(github.event.ref, 'refs/tags/')
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./build/FluGalleryWin64Msvc.zip
-          asset_name: ${{ env.fileName }}_${{ github.ref_name }}_${{ matrix.qt_arch }}_Qt${{ matrix.qt_ver }}.zip
-          tag: ${{ github.ref }}
-          overwrite: true
 
       #上传安装包
       - uses: ryand56/r2-upload-action@latest # Can be any release

@@ -220,7 +220,8 @@ configure_file(
 include(GNUInstallDirs)
 #set(CPACK_PACKAGE_FILE_NAME "I2CTool")
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
-set(CPACK_PACKAGE_FILE_NAME "xtxTools-${build_time}-${GIT_BRANCH}-${GIT_HASH}")
+#set(CPACK_PACKAGE_FILE_NAME "xtxTools-${build_time}-${GIT_BRANCH}-${GIT_HASH}")
+set(CPACK_PACKAGE_FILE_NAME "xtxTools")
 include(InstallRequiredSystemLibraries)
 set(CPACK_GENERATOR "ZIP")
 # 设置支持 COMPONENT
