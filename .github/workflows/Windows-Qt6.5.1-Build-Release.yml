@@ -1,5 +1,6 @@
 name: Windows-Qt6.5.1-Build-Release
 on:
+  push:
   workflow_dispatch:
 #  push:
 #    paths:
