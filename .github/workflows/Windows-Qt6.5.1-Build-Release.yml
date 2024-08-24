@@ -33,10 +33,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Check github.ref
-        run:
-          echo "GITHUB REF: ${{ github.event.ref }}"
-
       #准备编译链
       - name: Setup ninja
         uses: seanmiddleditch/gha-setup-ninja@master
@@ -86,7 +82,7 @@ jobs:
 
       #发布Release
       - name: New Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags')
         uses: svenstaro/upload-release-action@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
