@@ -96,7 +96,7 @@ macro(get_git_branch _git_branch)
     endif ()
 endmacro()
 
-string(TIMESTAMP COMPILE_TIME %Y%m%d_%H%M%S)
+string(TIMESTAMP COMPILE_TIME %Y%m%d_%H%M)
 set(build_time ${COMPILE_TIME})
 
 #git号
@@ -223,22 +223,47 @@ set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
 #set(CPACK_PACKAGE_FILE_NAME "xtxTools-${build_time}-${GIT_BRANCH}-${GIT_HASH}")
 set(CPACK_PACKAGE_FILE_NAME "xtxTools")
 include(InstallRequiredSystemLibraries)
+
 set(CPACK_GENERATOR "ZIP")
+#set(CPACK_GENERATOR "NSIS;ZIP")
+
+#NSIS相关（没开启）
+set(CPACK_PACKAGE_VENDOR "xtx Group")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "xtxTool Installer")
+set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/icon/icon.ico")
+set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/icon/icon.ico")
+#set(CPACK_NSIS_MUI_HEADERIMAGE "${CMAKE_SOURCE_DIR}/icon/backgroud.bmp")
+set(CPACK_NSIS_LICENSE_FILE "${CMAKE_SOURCE_DIR}/icon/LICENSE.txt")
+set(CPACK_NSIS_INSTALLER_MUI_ICON "${CMAKE_SOURCE_DIR}/icon/icon.ico")
+set(CPACK_NSIS_INSTALLER_MUI_UNIICON "${CMAKE_SOURCE_DIR}/icon/icon.ico")
+#set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CMAKE_SOURCE_DIR}/icon/backgroud.bmp")
+#set(CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${CMAKE_SOURCE_DIR}/icon/backgroud.bmp")
+set(CPACK_NSIS_HELP_LINK "https://www.myproject.com/help")
+set(CPACK_NSIS_URL_INFO_ABOUT "https://www.myproject.com")
+set(CPACK_NSIS_INSTALL_ROOT "C:/Program Files/CMake Tests Install Root")
+
+set(CPACK_NSIS_MUI_PAGE_WELCOME "ENABLE")
+set(CPACK_NSIS_MUI_PAGE_LICENSE "ENABLE")
+set(CPACK_NSIS_MUI_PAGE_DIRECTORY "ENABLE")
+set(CPACK_NSIS_MUI_PAGE_INSTFILES "ENABLE")
+set(CPACK_NSIS_MUI_PAGE_FINISH "ENABLE")
+set(CPACK_NSIS_MODERN_UI "ON")
+
 # 设置支持 COMPONENT
 set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
 set(CPACK_RPM_COMPONENT_INSTALL ON)
 # Settings used when building NSIS installers
-set(CPACK_NSIS_MENU_LINKS
-        "ftp://ftpserver" "Test Ftp Link"
-        "ftps://ftpsserver" "Test Ftps Link"
-        "https://cmake.org" "CMake Web Site"
-        "https://github.com/" "Test Https Link"
-        "mailto:kitware@kitware.com" "Test MailTo Link"
-        "news://newsserver" "Test News Link"
-)
+#set(CPACK_NSIS_MENU_LINKS
+#        "ftp://ftpserver" "Test Ftp Link"
+#        "ftps://ftpsserver" "Test Ftps Link"
+#        "https://cmake.org" "CMake Web Site"
+#        "https://github.com/" "Test Https Link"
+#        "mailto:kitware@kitware.com" "Test MailTo Link"
+#        "news://newsserver" "Test News Link"
+#)
 
 # Suggested default root for end users of the installer:
-set(CPACK_NSIS_INSTALL_ROOT "C:/Program Files/CMake Tests Install Root")
+
 
 set(CPACK_COMPONENTS_ALL I2CTool ComTool)
 set(CPACK_ARCHIVE_COMPONENT_INSTALL 1)
