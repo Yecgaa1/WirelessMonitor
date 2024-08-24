@@ -35,7 +35,7 @@ jobs:
 
       - name: Check github.ref
         run:
-          echo "GITHUB REF: ${{ github.ref }}"
+          echo "GITHUB REF: ${{ github.event.ref }}"
 
       #准备编译链
       - name: Setup ninja
