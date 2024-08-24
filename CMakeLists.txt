@@ -221,7 +221,13 @@ include(GNUInstallDirs)
 #set(CPACK_PACKAGE_FILE_NAME "I2CTool")
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
 #set(CPACK_PACKAGE_FILE_NAME "xtxTools-${build_time}-${GIT_BRANCH}-${GIT_HASH}")
-set(CPACK_PACKAGE_FILE_NAME "xtxTools")
+
+if (DEFINED UPDATE)
+    set(CPACK_PACKAGE_FILE_NAME "xtxTools-updatePackage")
+else ()
+    set(CPACK_PACKAGE_FILE_NAME "xtxTools")
+endif ()
+
 include(InstallRequiredSystemLibraries)
 
 set(CPACK_GENERATOR "ZIP")

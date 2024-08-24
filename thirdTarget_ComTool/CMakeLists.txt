@@ -39,7 +39,7 @@ file(GLOB_RECURSE HEADER "../components/ComTool/*.h")
 file(GLOB_RECURSE SOURCE "../components/ComTool/*.cpp")
 file(GLOB_RECURSE UI "../components/ComTool/*.ui")
 file(GLOB_RECURSE QRC "../components/ComTool/*.qrc")
-target_sources(${PROJECT_NAME} PUBLIC ${HEADER} ${SOURCE} ${UI} ${QRC} )
+target_sources(${PROJECT_NAME} PUBLIC ${HEADER} ${SOURCE} ${UI} ${QRC})
 target_include_directories(${PROJECT_NAME} PUBLIC ../components/ComTool/)
 
 add_subdirectory(../api/Highlighter Highlighter)
@@ -121,6 +121,26 @@ add_custom_target(install_ComTool
         COMMAND ${CMAKE_COMMAND} --install . --component ComTool
 )
 
+#组织安装包
+if (NOT DEFINED UPDATE)
+    install(DIRECTORY  ${PROJECT_SOURCE_DIR}/../thirdLib/qmetarial/icons ${PROJECT_SOURCE_DIR}/../thirdLib/qmetarial/fonts
+            DESTINATION ${CMAKE_INSTALL_BINDIR}/resource
+            COMPONENT ComTool
+    )
+    install(DIRECTORY  ${PROJECT_SOURCE_DIR}/config ${PROJECT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/res ${PROJECT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/StyleSheet
+            DESTINATION ${CMAKE_INSTALL_BINDIR}
+            COMPONENT ComTool
+    )
+else ()
+    install(DIRECTORY  ${PROJECT_SOURCE_DIR}/../thirdLib/qmetarial/icons ${PROJECT_SOURCE_DIR}/../thirdLib/qmetarial/fonts
+            DESTINATION ${CMAKE_INSTALL_BINDIR}/resource
+            COMPONENT ComTool
+    )
+    install(DIRECTORY  ${PROJECT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/res ${PROJECT_SOURCE_DIR}/../thirdLib/CppQtFluentUi888/StyleSheet
+            DESTINATION ${CMAKE_INSTALL_BINDIR}
+            COMPONENT ComTool
+    )
+endif ()
 
 
 if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/resource")
