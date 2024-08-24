@@ -54,7 +54,7 @@ jobs:
           ninja --version
           mkdir build
           cd build
-          cmake -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DBoost_NO_SYSTEM_PATHS=ON -DBoost_LIBRARY_DIR_RELEASE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows/lib -DCMAKE_PREFIX_PATH=D:/a/WirelessMonitor/Qt/${{ matrix.qt_ver }}/msvc2019_64/lib/cmake/;D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows-release/share/ -DCMAKE_TOOLCHAIN_FILE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DUPDATE -DCMAKE_BUILD_TYPE=Release -GNinja ..                
+          cmake -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DBoost_NO_SYSTEM_PATHS=ON -DBoost_LIBRARY_DIR_RELEASE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows/lib -DCMAKE_PREFIX_PATH=D:/a/WirelessMonitor/Qt/${{ matrix.qt_ver }}/msvc2019_64/lib/cmake/;D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows-release/share/ -DCMAKE_TOOLCHAIN_FILE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DUPDATE=1 -DCMAKE_BUILD_TYPE=Release -GNinja ..                
           cmake --build . --target all --config Release --parallel
           cmake --build . --target package
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
