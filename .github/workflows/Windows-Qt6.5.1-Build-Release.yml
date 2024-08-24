@@ -70,6 +70,7 @@ jobs:
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
+
       #编译失败时打开调试接口
       - name: Setup tmate session if failed
         if: ${{ failure() }}
@@ -77,6 +78,7 @@ jobs:
         with:
           limit-access-to-actor: false
           timeout-minutes: 300
+          
       #发布Release
       - name: New Release
         if: startsWith(github.ref, 'refs/tags/')
