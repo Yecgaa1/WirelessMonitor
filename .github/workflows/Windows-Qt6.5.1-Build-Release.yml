@@ -86,7 +86,7 @@ jobs:
         uses: svenstaro/upload-release-action@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./build/xtxTool-*
+          file: D:/a/WirelessMonitor/WirelessMonitor/build/xtxTools-updatePackage-ComTool.zip
           asset_name: ${{ env.fileName }}_${{ github.ref_name }}_${{ matrix.qt_arch }}_Qt${{ matrix.qt_ver }}.zip
           tag: ${{ github.ref }}
           overwrite: true
