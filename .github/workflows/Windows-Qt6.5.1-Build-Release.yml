@@ -81,12 +81,23 @@ jobs:
           timeout-minutes: 300
 
       #发布Release
-      - name: New Release
+      - name: New Release1
         if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: D:/a/WirelessMonitor/WirelessMonitor/build/xtxTools-updatePackage-ComTool.zip
+          file: D:/a/WirelessMonitor/WirelessMonitor/build/xtxTools-ComTool.zip
+          asset_name: ${{ env.fileName }}_${{ github.ref_name }}_${{ matrix.qt_arch }}_Qt${{ matrix.qt_ver }}.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+
+      #发布Release
+      - name: New Release2
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: D:/a/WirelessMonitor/WirelessMonitor/build/xtxTools-I2CTool.zip
           asset_name: ${{ env.fileName }}_${{ github.ref_name }}_${{ matrix.qt_arch }}_Qt${{ matrix.qt_ver }}.zip
           tag: ${{ github.ref }}
           overwrite: true
