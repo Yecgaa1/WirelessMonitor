@@ -88,10 +88,11 @@ set(GIT_BRANCH "")
 #message(STATUS "${build_time} ${GIT_BRANCH} ${GIT_HASH}")
 set(big_version "${PROJECT_VERSION}")
 set(bat_version "${PROJECT_VERSION}.${build_time}")
-set(ENV{big_version} ${big_version})
+
 
 message(STATUS "big_version: ${big_version}")
 message(STATUS "bat_version: ${bat_version}")
+file(WRITE ${CMAKE_BINARY_DIR}/bat_version ${bat_version})
 
 #准备构建无线调试器
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

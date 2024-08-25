@@ -31,7 +31,7 @@ jobs:
           submodules: recursive
           fetch-depth: 50
           fetch-tags: true
-          
+
       #准备编译链
       - name: Setup ninja
         uses: seanmiddleditch/gha-setup-ninja@master
