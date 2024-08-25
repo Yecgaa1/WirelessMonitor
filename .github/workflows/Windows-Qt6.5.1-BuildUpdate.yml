@@ -114,7 +114,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         with:
           namespace_id: 'bc1b5fa218be404e9b3ccdb9bdc4fd53'
-          key: '/hello'
+          key: '//hello'
           value:  'world'
           overwrite: "true"
 
