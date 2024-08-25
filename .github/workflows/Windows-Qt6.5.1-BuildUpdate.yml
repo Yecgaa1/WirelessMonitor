@@ -81,8 +81,8 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: xtxtools
-          source-dir: xtxTools-updatePackage-ComTool.zip
-          destination-dir: artifacts # Can be anything as long as it is an actual path
+          source-dir: ./build/xtxTools-updatePackage-ComTool.zip
+          destination-dir: ./ # Can be anything as long as it is an actual path
           output-file-url: 'true' # defaults to true
           multipart-size: 100 # If the file size is greater than the value provided here, then use multipart upload
           max-retries: 5 # The maximum number of retries it takes to upload a multipart chunk until it moves on to the next part
@@ -100,7 +100,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_EMAIL: ${{ secrets.CLOUDFLARE_ACCOUNT_EMAIL }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         with:
-          namespace_identifier: '123'
+          namespace_identifier: 'bc1b5fa218be404e9b3ccdb9bdc4fd53'
           key_name: 'hello'
           value: 'world'
           expiration_ttl: 120
