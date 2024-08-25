@@ -107,13 +107,14 @@ jobs:
 
 
       - name: Fetch cached git commit else store it
-        uses: icyleaf/cloudflare-workers-kv-action@main
+        uses: xutongxin1/cloudflare-workers-kv-action@main
         id: KV
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_KEY }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         with:
           namespace_id: 'bc1b5fa218be404e9b3ccdb9bdc4fd53'
-          key: 'hello'
+          key: '/hello'
           value:  'world'
+          overwrite: "true"
 
