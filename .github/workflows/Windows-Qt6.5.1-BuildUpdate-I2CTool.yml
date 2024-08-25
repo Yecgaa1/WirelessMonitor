@@ -1,4 +1,4 @@
-name: Windows-Qt6.5.1-BuildUpdate
+name: Windows-Qt6.5.1-BuildUpdate-I2CTool
 on:
   push:
     paths:
