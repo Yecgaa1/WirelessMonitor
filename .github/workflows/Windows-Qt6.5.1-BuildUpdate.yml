@@ -107,7 +107,7 @@ jobs:
 
 
       - name: Fetch cached git commit else store it
-        uses: icyleaf/cloudflare-workers-kv-action@latest
+        uses: icyleaf/cloudflare-workers-kv-action@main
         id: KV
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_KEY }}
