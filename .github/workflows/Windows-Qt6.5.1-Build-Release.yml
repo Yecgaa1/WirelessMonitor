@@ -1,3 +1,5 @@
+#该action仅表征有新构建，如果为发布tag仅表征任一工具有新发布
+
 name: Windows-Qt6.5.1-Build-Release
 on:
   push:
@@ -65,12 +67,20 @@ jobs:
           mkdir build
           cd build
           cmake -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DBoost_NO_SYSTEM_PATHS=ON -DBoost_LIBRARY_DIR_RELEASE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows/lib -DCMAKE_PREFIX_PATH=D:/a/WirelessMonitor/Qt/${{ matrix.qt_ver }}/msvc2019_64/lib/cmake/;D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows-release/share/ -DCMAKE_TOOLCHAIN_FILE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release -GNinja ..                
+          
+          setlocal enabledelayedexpansion
+          set /p bat_version=<bat_version
+          echo bat_version is %bat_version%
+          echo "bat_version=$bat_version" >> $GITHUB_ENV
+          echo "::set-output name=bat_version::$bat_version"
+          
           cmake --build . --target all --config Release --parallel
           cmake --build . --target package
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
+
 
       #编译失败时打开调试接口
       - name: Setup tmate session if failed

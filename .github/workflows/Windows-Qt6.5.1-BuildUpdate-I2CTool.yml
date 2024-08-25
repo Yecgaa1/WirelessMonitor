@@ -1,6 +1,12 @@
 name: Windows-Qt6.5.1-BuildUpdate
 on:
   push:
+    paths:
+      - 'api/**'
+      - 'components/IICDeviceBasic/**'
+      - 'thirdLib/**'
+      - 'thirdTarget_I2CTool/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 jobs:
   build:
@@ -15,8 +21,8 @@ jobs:
             msvc_arch: x64
             qt_arch_install: msvc2019_64
     env:
-      targetName: ComTool.exe
-      fileName: ComTool
+      targetName: I2CTool.exe
+      fileName: I2CTool
     steps:
       #准备仓库
       - name: Check out repository
@@ -55,6 +61,8 @@ jobs:
           mkdir build
           cd build
           cmake -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DBoost_NO_SYSTEM_PATHS=ON -DBoost_LIBRARY_DIR_RELEASE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows/lib -DCMAKE_PREFIX_PATH=D:/a/WirelessMonitor/Qt/${{ matrix.qt_ver }}/msvc2019_64/lib/cmake/;D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows-release/share/ -DCMAKE_TOOLCHAIN_FILE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DUPDATE=1 -DCMAKE_BUILD_TYPE=Release -GNinja ..                
+          
+          
           cmake --build . --target all --config Release --parallel
           cmake --build . --target package
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
@@ -72,22 +80,6 @@ jobs:
       #修改所在位置
       - name: Set up the working directory
         run: cd D:/a/WirelessMonitor/WirelessMonitor/build
-
-      #上传ComTool安装包
-      - uses: ryand56/r2-upload-action@latest # Can be any release
-        id: cloudflare_r2_ComTool
-        with:
-          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
-          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          r2-bucket: xtxtools
-          source-dir: ./build/xtxTools-updatePackage-ComTool.zip
-          destination-dir: ./ # Can be anything as long as it is an actual path
-          output-file-url: 'true' # defaults to true
-          multipart-size: 100 # If the file size is greater than the value provided here, then use multipart upload
-          max-retries: 5 # The maximum number of retries it takes to upload a multipart chunk until it moves on to the next part
-          multipart-concurrent: true # Whether to concurrently upload a multipart chunk
-          keep-file-fresh: 'true' # defaults to false
 
       #上传I2CTool安装包
       - uses: ryand56/r2-upload-action@latest # Can be any release
@@ -114,7 +106,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         with:
           namespace_id: 'bc1b5fa218be404e9b3ccdb9bdc4fd53'
-          key: '//hello'
+          key: 'hello'
           value:  'world'
           overwrite: "true"
 

@@ -1,20 +1,103 @@
 #你的CMake构建选项应该如下样式
-#-G Ninja
-#-DBoost_NO_SYSTEM_PATHS=ON
-#-DBoost_INCLUDE_DIRS="C:/Users/xtx/.vcpkg-clion/vcpkg/installed/x64-windows/include/"
-#-DBOOST_LIBRARY_DIRS="C:/Users/xtx/.vcpkg-clion/vcpkg/installed/x64-windows/lib"
-#-DBoost_LIBRARY_DIR_DEBUG="C:/Users/xtx/.vcpkg-clion/vcpkg/installed/x64-windows/debug/lib"
-#-DBoost_LIBRARY_DIR_RELEASE="C:/Users/xtx/.vcpkg-clion/vcpkg/installed/x64-windows-release/lib"
-#-DCMAKE_PREFIX_PATH="C:\Qt\6.5.3\msvc2019_64\lib\cmake\"  -DCMAKE_TOOLCHAIN_FILE="C:/Users/xtx/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake"
-#由于未能解决findboost问题，暂时如此设置
+
+
+#设置最低版本
 cmake_minimum_required(VERSION 3.24)
+#递归查找最近的符合条件的 Git 标签
+function(find_valid_version_tag OUTPUT_VAR)
+    set(COMMAND_RESULT)
+    execute_process(
+            COMMAND git describe --tags --abbrev=0 ${COMMAND_RESULT}
+            OUTPUT_VARIABLE TAG
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+    )
+
+    if (TAG MATCHES "^v[0-9]+")
+        string(REGEX REPLACE "^v" "" VERSION_NUMBER "${TAG}")
+        set(${OUTPUT_VAR} ${VERSION_NUMBER} PARENT_SCOPE)
+    else ()
+        # 如果未找到或不符合条件，使用 `git describe --tags --abbrev=0 --skip=x` 递归查找
+        set(SKIP_COUNTER 1)
+        while (NOT TAG MATCHES "^v[0-9]+" AND SKIP_COUNTER LESS 100)
+            execute_process(
+                    COMMAND git describe --tags --abbrev=0 --skip=${SKIP_COUNTER}
+                    OUTPUT_VARIABLE TAG
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                    ERROR_QUIET
+            )
+            if (TAG MATCHES "^v[0-9]+")
+                string(REGEX REPLACE "^v" "" VERSION_NUMBER "${TAG}")
+                set(${OUTPUT_VAR} ${VERSION_NUMBER} PARENT_SCOPE)
+                break()
+            endif ()
+            math(EXPR SKIP_COUNTER "${SKIP_COUNTER} + 1")
+        endwhile ()
+
+        if (NOT TAG MATCHES "^v[0-9]+")
+            message(FATAL_ERROR "No valid version tag found.")
+        endif ()
+    endif ()
+endfunction()
+
+
 #project(Qt)
+find_valid_version_tag(PROJECT_VERSION)
+message(STATUS "PROJECT_VERSION: ${PROJECT_VERSION}")
 
+#获取git信息
+## get git hash
+#macro(get_git_hash _git_hash)
+#    find_package(Git QUIET)
+#    if (GIT_FOUND)
+#        execute_process(
+#                COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%h
+#                OUTPUT_VARIABLE ${_git_hash}
+#                OUTPUT_STRIP_TRAILING_WHITESPACE
+#                ERROR_QUIET
+#                WORKING_DIRECTORY
+#                ${PROJECT_SOURCE_DIR}
+#        )
+#    endif ()
+#endmacro()
+#
+## get git branch
+#macro(get_git_branch _git_branch)
+#    find_package(Git QUIET)
+#    if (GIT_FOUND)
+#        execute_process(
+#                COMMAND ${GIT_EXECUTABLE} symbolic-ref --short -q HEAD
+#                OUTPUT_VARIABLE ${_git_branch}
+#                OUTPUT_STRIP_TRAILING_WHITESPACE
+#                ERROR_QUIET
+#                WORKING_DIRECTORY
+#                ${PROJECT_SOURCE_DIR}
+#        )
+#    endif ()
+#endmacro()
+
+string(TIMESTAMP COMPILE_TIME %Y%m%d.%H%M)
+set(build_time ${COMPILE_TIME})
+
+#git号
+set(GIT_HASH "")
+#get_git_hash(GIT_HASH)
+#git分支
+set(GIT_BRANCH "")
+#get_git_branch(GIT_BRANCH)
+#message(STATUS "${build_time} ${GIT_BRANCH} ${GIT_HASH}")
+set(big_version "${PROJECT_VERSION}")
+set(bat_version "${PROJECT_VERSION}.${build_time}")
+set(ENV{big_version} ${big_version})
+
+message(STATUS "big_version: ${big_version}")
+message(STATUS "bat_version: ${bat_version}")
+
+#准备构建无线调试器
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 project(
         WirelessMonitor
-        VERSION 0.1
+        VERSION ${PROJECT_VERSION}
         LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -65,49 +148,6 @@ find_package(Python
 find_package(Boost
         REQUIRED COMPONENTS python311)
 #find_package(Boost)
-
-# get git hash
-macro(get_git_hash _git_hash)
-    find_package(Git QUIET)
-    if (GIT_FOUND)
-        execute_process(
-                COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%h
-                OUTPUT_VARIABLE ${_git_hash}
-                OUTPUT_STRIP_TRAILING_WHITESPACE
-                ERROR_QUIET
-                WORKING_DIRECTORY
-                ${PROJECT_SOURCE_DIR}
-        )
-    endif ()
-endmacro()
-
-# get git branch
-macro(get_git_branch _git_branch)
-    find_package(Git QUIET)
-    if (GIT_FOUND)
-        execute_process(
-                COMMAND ${GIT_EXECUTABLE} symbolic-ref --short -q HEAD
-                OUTPUT_VARIABLE ${_git_branch}
-                OUTPUT_STRIP_TRAILING_WHITESPACE
-                ERROR_QUIET
-                WORKING_DIRECTORY
-                ${PROJECT_SOURCE_DIR}
-        )
-    endif ()
-endmacro()
-
-string(TIMESTAMP COMPILE_TIME %Y%m%d_%H%M)
-set(build_time ${COMPILE_TIME})
-
-#git号
-set(GIT_HASH "")
-get_git_hash(GIT_HASH)
-#git分支
-set(GIT_BRANCH "")
-get_git_branch(GIT_BRANCH)
-
-message(STATUS "${build_time} ${GIT_BRANCH} ${GIT_HASH}")
-
 
 file(GLOB HEADER "*.h")
 file(GLOB RSOURCE "*.cpp")

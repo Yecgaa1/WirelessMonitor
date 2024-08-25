@@ -1,7 +1,7 @@
 
 project(
         thirdTarget_I2CTool
-        VERSION 0.1
+        VERSION ${PROJECT_VERSION}
         LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
