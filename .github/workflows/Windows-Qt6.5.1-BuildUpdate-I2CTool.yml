@@ -114,3 +114,15 @@ jobs:
           value:  ${{env.bat_version}}
           overwrite: "true"
 
+      #保存链接
+      - name: KV_SaveVersion
+        uses: icyleaf/cloudflare-workers-kv-action@main
+        id: KV_SaveVersion
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        with:
+          namespace_id: 'bc1b5fa218be404e9b3ccdb9bdc4fd53'
+          key: 'I2CTool_url'
+          value:  ${{ steps.cloudflare_r2_I2CTool.outputs.file-urls }}
+          overwrite: "true"
