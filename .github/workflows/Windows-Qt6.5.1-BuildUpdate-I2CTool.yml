@@ -68,7 +68,7 @@ jobs:
           setlocal enabledelayedexpansion
           set /p bat_version=<bat_version
           echo bat_version is %bat_version%
-          echo "bat_version=$bat_version" >> $GITHUB_ENV
+           echo bat_version=%bat_version% >> $GITHUB_ENV
           echo "::set-output name=bat_version::$bat_version"
           
           cmake --build . --target all --config Release --parallel
@@ -84,10 +84,6 @@ jobs:
         with:
           limit-access-to-actor: false
           timeout-minutes: 300
-
-      #修改所在位置
-      - name: Set up the working directory
-        run: cd D:/a/WirelessMonitor/WirelessMonitor/build
 
       #上传I2CTool安装包
       - uses: ryand56/r2-upload-action@latest # Can be any release
@@ -114,7 +110,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         with:
           namespace_id: 'bc1b5fa218be404e9b3ccdb9bdc4fd53'
-          key: 'hello'
-          value:  'world'
+          key: 'I2CTool_version'
+          value:  ${{env.bat_version}}
           overwrite: "true"
 
