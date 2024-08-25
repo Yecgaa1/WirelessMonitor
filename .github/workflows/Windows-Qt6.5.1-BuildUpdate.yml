@@ -71,9 +71,7 @@ jobs:
 
       #修改所在位置
       - name: Set up the working directory
-        run: |
-              echo "This command runs in the 'build' directory."
-        working-directory: D:/a/WirelessMonitor/WirelessMonitor/build
+        run: cd D:/a/WirelessMonitor/WirelessMonitor/build
 
       #上传安装包
       - uses: ryand56/r2-upload-action@latest # Can be any release
