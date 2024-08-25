@@ -69,6 +69,12 @@ jobs:
           limit-access-to-actor: false
           timeout-minutes: 300
 
+      #修改所在位置
+      - name: Set up the working directory
+        run: |
+              echo "This command runs in the 'build' directory."
+        working-directory: D:/a/WirelessMonitor/WirelessMonitor/build
+
       #上传安装包
       - uses: ryand56/r2-upload-action@latest # Can be any release
         id: cloudflare_r2
@@ -77,7 +83,7 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: xtxtools
-          source-dir: D:/a/WirelessMonitor/WirelessMonitor/build/xtxTools-updatePackage-ComTool.zip
+          source-dir: xtxTools-updatePackage-ComTool.zip
           destination-dir: artifacts # Can be anything as long as it is an actual path
           output-file-url: 'true' # defaults to true
           multipart-size: 100 # If the file size is greater than the value provided here, then use multipart upload
