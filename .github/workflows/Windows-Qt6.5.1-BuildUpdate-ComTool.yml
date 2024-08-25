@@ -64,6 +64,13 @@ jobs:
           mkdir build
           cd build
           cmake -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DBoost_NO_SYSTEM_PATHS=ON -DBoost_LIBRARY_DIR_RELEASE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows/lib -DCMAKE_PREFIX_PATH=D:/a/WirelessMonitor/Qt/${{ matrix.qt_ver }}/msvc2019_64/lib/cmake/;D:/a/WirelessMonitor/WirelessMonitor/vcpkg/installed/x64-windows-release/share/ -DCMAKE_TOOLCHAIN_FILE=D:/a/WirelessMonitor/WirelessMonitor/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DUPDATE=1 -DCMAKE_BUILD_TYPE=Release -GNinja ..                
+          
+          setlocal enabledelayedexpansion
+          set /p bat_version=<bat_version
+          echo bat_version is %bat_version%
+          echo "bat_version=$bat_version" >> $GITHUB_ENV
+          echo "::set-output name=bat_version::$bat_version"
+  
           cmake --build . --target all --config Release --parallel
           cmake --build . --target package
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
@@ -99,7 +106,7 @@ jobs:
           keep-file-fresh: 'true' # defaults to false
 
       - name: Fetch cached git commit else store it
-        uses: xutongxin1/cloudflare-workers-kv-action@main
+        uses: icyleaf/cloudflare-workers-kv-action@main
         id: KV
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_KEY }}
